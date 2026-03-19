@@ -120,7 +120,7 @@ main{
 .hero h1 em{
   font-style:normal;
   background:linear-gradient(90deg,var(--green),#5be8c0);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
 }
 .hero p{
   font-size:1rem;color:var(--muted);
@@ -570,11 +570,15 @@ main{
 .card,.question-card,.stat-card{animation:fadeUp .35s ease both}
 
 /* ───────── RESPONSIVE ───────── */
-@media(max-width:580px){
-  nav{padding:14px 18px}
+@media(max-width:800px){
+  nav{flex-wrap:wrap; justify-content:center; gap:12px; padding:14px 18px}
+  .nav-tabs{flex-wrap:wrap; justify-content:center; width:100%; order:3}
   main{padding:24px 14px 60px}
   .tutor-input-row{flex-direction:column}
   .know-btns{flex-direction:column}
+}
+@media(max-width:400px){
+  .nav-tab{padding:6px 10px; font-size:0.75rem}
 }
 </style>
 </head>
