@@ -1424,7 +1424,7 @@ async function generateMindmap() {
       mermaid.initialize({ startOnLoad: false, theme: isLight ? 'default' : 'dark' });
       mermaid.init(undefined, document.querySelectorAll('.mermaid'));
     } else {
-      container.innerHTML = `<div style="color:var(--red)">Failed to generate map.</div>`;
+      container.innerHTML = `<div style="color:var(--red)">${data.detail || "Failed to generate map."}</div>`;
     }
   } catch (err) {
     loader.style.display = "none";
@@ -1454,11 +1454,15 @@ async function submitFeynman() {
     const data = await res.json();
     loader.style.display = "none";
     feedback.style.display = "block";
-    feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-      <h4 style="color:var(--green); margin:0;">AI Feedback</h4>
-      <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
-    </div>
-    <div>${marked.parse(data.feedback || "No feedback returned.")}</div>`;
+    if (data.feedback) {
+      feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <h4 style="color:var(--green); margin:0;">AI Feedback</h4>
+        <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
+      </div>
+      <div>${marked.parse(data.feedback)}</div>`;
+    } else {
+      feedback.innerHTML = `<em style='color:var(--red)'>${data.detail || "No feedback returned."}</em>`;
+    }
   } catch (err) {
     loader.style.display = "none";
     feedback.style.display = "block";
