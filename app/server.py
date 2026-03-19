@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import shutil, os, json, re, uuid
 
-from app.ai_engine import generate_response, classify_topics, generate_quiz
+from app.ai_engine import generate_response, classify_topics, generate_quiz, evaluate_explanation, generate_mindmap
 from app.pdf_processor import extract_text_from_pdf
 
 app = FastAPI(title="StudyMate API", version="2.1")
@@ -191,3 +191,39 @@ async def explain_topic(data: TopicRequest):
     except Exception as e:
         print("EXPLAIN ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Explanation failed.")
+
+# ───────── FEYNMAN TECHNIQUE ─────────
+class FeynmanRequest(BaseModel):
+    topic: str
+    explanation: str
+
+@app.post("/feynman-evaluate/")
+async def feynman_evaluate(data: FeynmanRequest):
+    try:
+        if not data.topic.strip() or not data.explanation.strip():
+            raise HTTPException(status_code=400, detail="Topic and explanation cannot be empty.")
+
+        context = stored_text if stored_text else ""
+        feedback = evaluate_explanation(data.topic, data.explanation, context)
+
+        return {"feedback": feedback}
+
+    except Exception as e:
+        print("FEYNMAN ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Feynman evaluation failed.")
+
+# ───────── MIND MAP ─────────
+@app.post("/generate-mindmap/")
+async def generate_mindmap_endpoint():
+    try:
+        if not stored_text:
+            raise HTTPException(status_code=400, detail="No document uploaded yet.")
+
+        mindmap_raw = generate_mindmap(stored_text)
+        mindmap_cleaned = mindmap_raw.replace("```mermaid", "").replace("```", "").strip()
+
+        return {"mindmap": mindmap_cleaned}
+
+    except Exception as e:
+        print("MINDMAP ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Mind map generation failed.")
