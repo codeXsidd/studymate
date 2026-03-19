@@ -604,18 +604,24 @@ main{
 }
 /* ───────── MIND MAP VISIBILITY ───────── */
 #mindmapContainer {
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   max-height: 70vh;
   width: 100%;
+  background: var(--surface2);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  text-align: center;
 }
 .mermaid {
-  min-width: 900px;
+  width: 100%;
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
 }
 .mermaid svg {
-  max-width: none !important;
+  max-width: 100% !important;
   height: auto !important;
 }
 </style>
@@ -849,7 +855,7 @@ main{
       <div class="dot-anim"><span></span><span></span><span></span></div>
       <span>Generating visual map…</span>
     </div>
-    <div id="mindmapContainer" style="overflow:-moz-scrollbars-vertical; overflow-x:auto; text-align:center; background:var(--surface2); padding:20px; border-radius:10px; border:1px solid var(--border);">
+    <div id="mindmapContainer">
       <div class="empty-state"><div class="empty-icon">📊</div>Upload a PDF and generate the map</div>
     </div>
   </div>
