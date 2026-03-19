@@ -120,7 +120,9 @@ main{
 .hero h1 em{
   font-style:normal;
   background:linear-gradient(90deg,var(--green),#5be8c0);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 .hero p{
   font-size:1rem;color:var(--muted);
@@ -570,11 +572,27 @@ main{
 .card,.question-card,.stat-card{animation:fadeUp .35s ease both}
 
 /* ───────── RESPONSIVE ───────── */
-@media(max-width:580px){
-  nav{padding:14px 18px}
-  main{padding:24px 14px 60px}
-  .tutor-input-row{flex-direction:column}
-  .know-btns{flex-direction:column}
+@media(max-width:860px){
+  nav { flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 16px 24px; }
+  .nav-tabs { overflow-x: auto; white-space: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch; flex: 1 1 100%; justify-content: flex-start; padding-bottom: 4px; border-bottom: 1px solid transparent; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+}
+@media(max-width:600px){
+  nav { padding: 12px 16px; }
+  .nav-tab { padding: 8px 12px; font-size: 0.8rem; }
+  main { padding: 20px 12px 60px; }
+  .hero { padding: 32px 0 40px; }
+  .hero h1 { font-size: 2.4rem; }
+  .card { padding: 20px; }
+  .tutor-input-row { flex-direction: column; }
+  .tutor-input-row button { width: 100%; }
+  .know-btns { flex-direction: column; }
+  .know-card { padding: 24px; }
+  .options-list { gap: 8px; }
+  .option { padding: 12px 14px; }
+  .score-circle { width: 110px; height: 110px; }
+  .timer-ring { width: 44px; height: 44px; }
+  .timer-ring svg { width: 100%; height: 100%; }
 }
 </style>
 </head>
