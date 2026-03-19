@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <style>
 /* ───────── RESET & VARIABLES ───────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -603,8 +602,6 @@ main{
   <div class="logo">Study<span>Mate</span></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
-    <button class="nav-tab" onclick="showPage('mindmap')">🧠 Mind Map</button>
-    <button class="nav-tab" onclick="showPage('feynman')">🎓 Feynman</button>
     <button class="nav-tab" onclick="showPage('tutor')">🤖 Tutor</button>
     <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
   </div>
@@ -693,10 +690,7 @@ main{
   </div>
 
   <div class="question-card">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div class="question-number" id="questionNumber">QUESTION 1</div>
-      <button class="btn btn-outline" style="padding:2px 8px; font-size:0.75rem;" onclick="speakText(document.getElementById('questionText').innerText)">🔊 Read</button>
-    </div>
+    <div class="question-number" id="questionNumber">QUESTION 1</div>
     <div class="question-text" id="questionText"></div>
   </div>
 
@@ -763,7 +757,6 @@ main{
       <span>Generating explanation…</span>
     </div>
     <div class="explanation-panel show" id="explanationContent"></div>
-    <button class="btn btn-outline" style="margin-top:8px; padding:4px 10px; font-size:0.8rem;" onclick="speakText(document.getElementById('explanationContent').innerText)">🔊 Read Explanation</button>
     <div class="btn-row" style="margin-top:16px">
       <button class="btn btn-primary" id="startQuizAfterLearn" onclick="startQuizFromExplanation()">✅ I'm ready — Quiz me!</button>
     </div>
@@ -811,52 +804,6 @@ main{
   </div>
 </div>
 
-<!-- ═══════ MIND MAP PAGE ═══════ -->
-<div class="page" id="mindmapPage">
-  <div style="padding-top:12px;margin-bottom:28px">
-    <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:6px">Concept Mind Map 🧠</div>
-    <div style="font-size:.9rem;color:var(--muted)">Visualize connections between topics</div>
-  </div>
-  <div class="card">
-    <div class="btn-row" style="justify-content:center;margin-bottom:20px;">
-      <button class="btn btn-primary" onclick="generateMindmap()">Generate Mind Map ✦</button>
-    </div>
-    <div class="thinking" id="mindmapLoader" style="display:none; justify-content:center; margin-bottom:20px;">
-      <div class="dot-anim"><span></span><span></span><span></span></div>
-      <span>Generating visual map…</span>
-    </div>
-    <div id="mindmapContainer" style="overflow:-moz-scrollbars-vertical; overflow-x:auto; text-align:center; background:var(--surface2); padding:20px; border-radius:10px; border:1px solid var(--border);">
-      <div class="empty-state"><div class="empty-icon">📊</div>Upload a PDF and generate the map</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ FEYNMAN PAGE ═══════ -->
-<div class="page" id="feynmanPage">
-  <div style="padding-top:12px;margin-bottom:28px">
-    <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:6px">Feynman Technique 🎓</div>
-    <div style="font-size:.9rem;color:var(--muted)">Teach the AI to test your true understanding</div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span class="icon">🎯</span> What are you explaining?</div>
-    <input type="text" id="feynmanTopic" class="tutor-input" placeholder="e.g. Photosynthesis" style="width:100%; margin-bottom:16px;">
-    
-    <div class="card-title"><span class="icon">🗣️</span> Explain it simply:</div>
-    <textarea id="feynmanExplanation" class="tutor-input" placeholder="Explain the concept as if I were a 5-year-old..." rows="5" style="width:100%;"></textarea>
-    
-    <div class="btn-row" style="margin-top:16px">
-      <button class="btn btn-primary" onclick="submitFeynman()">Evaluate My Explanation ✦</button>
-    </div>
-    
-    <div class="thinking" id="feynmanLoader" style="display:none; margin-top:20px;">
-      <div class="dot-anim"><span></span><span></span><span></span></div>
-      <span>Evaluating your knowledge…</span>
-    </div>
-    
-    <div class="tutor-answer" id="feynmanFeedback" style="display:none; margin-top:20px; border-left:3px solid var(--green);"></div>
-  </div>
-</div>
-
 </main>
 
 <!-- TOAST -->
@@ -899,8 +846,8 @@ function showPage(id) {
   document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
   document.getElementById(id + "Page").classList.add("active");
   const tabs = document.querySelectorAll(".nav-tab");
-  const map = { home: 0, mindmap: 1, feynman: 2, tutor: 3, dashboard: 4 };
-  if(tabs[map[id]]) tabs[map[id]].classList.add("active");
+  const map = { home: 0, tutor: 1, dashboard: 2 };
+  tabs[map[id]].classList.add("active");
   if (id === "dashboard") renderDashboard();
 }
 
@@ -1339,11 +1286,7 @@ async function askTutor() {
     const data = await res.json();
     thinking.classList.remove("show");
     ans.style.display = "block";
-    ans.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-      <strong style="color:var(--green)">Answer:</strong>
-      <button class="btn btn-outline" style="padding:2px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
-    </div>
-    <div>${marked.parse(data.answer || "No answer returned.")}</div>`;
+    ans.innerHTML = marked.parse(data.answer || "No answer returned.");
   } catch (err) {
     thinking.classList.remove("show");
     ans.style.display = "block";
@@ -1398,85 +1341,6 @@ function renderDashboard() {
     wa.innerHTML = d.weakAreas.slice(0, 8).map(q =>
       `<div class="weak-item" style="padding:10px 0;border-bottom:1px solid var(--border)">${q}</div>`
     ).join("");
-  }
-}
-
-// ═════════════════════════════════════════
-//  TEXT TO SPEECH (TTS)
-// ═════════════════════════════════════════
-function speakText(text) {
-  if (!window.speechSynthesis) {
-    showToast("⚠ Text-to-speech not supported in this browser.");
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const stripped = text.replace(/<[^>]+>/g, '').replace(/[\*\_\[\]\#\`]/g, '');
-  const utterance = new SpeechSynthesisUtterance(stripped);
-  utterance.rate = 0.95;
-  window.speechSynthesis.speak(utterance);
-}
-
-// ═════════════════════════════════════════
-//  MIND MAP
-// ═════════════════════════════════════════
-async function generateMindmap() {
-  if (state.topics.length === 0) {
-    showToast("⚠ Please upload a PDF first to generate a mind map.");
-    return;
-  }
-  const loader = document.getElementById("mindmapLoader");
-  const container = document.getElementById("mindmapContainer");
-  loader.style.display = "flex";
-  container.innerHTML = "";
-
-  try {
-    const res = await fetch(`${API}/generate-mindmap/`, { method: "POST" });
-    const data = await res.json();
-    loader.style.display = "none";
-    if (data.mindmap) {
-      container.innerHTML = `<div class="mermaid">${data.mindmap}</div>`;
-      mermaid.initialize({ startOnLoad: false, theme: isLight ? 'default' : 'dark' });
-      mermaid.init(undefined, document.querySelectorAll('.mermaid'));
-    } else {
-      container.innerHTML = `<div style="color:var(--red)">Failed to generate map.</div>`;
-    }
-  } catch (err) {
-    loader.style.display = "none";
-    container.innerHTML = `<div style="color:var(--red)">Error connecting to server.</div>`;
-  }
-}
-
-// ═════════════════════════════════════════
-//  FEYNMAN TECHNIQUE
-// ═════════════════════════════════════════
-async function submitFeynman() {
-  const topic = document.getElementById("feynmanTopic").value.trim();
-  const exp = document.getElementById("feynmanExplanation").value.trim();
-  if (!topic || !exp) { showToast("⚠ Please enter a topic and an explanation."); return; }
-
-  const loader = document.getElementById("feynmanLoader");
-  const feedback = document.getElementById("feynmanFeedback");
-  loader.style.display = "flex";
-  feedback.style.display = "none";
-
-  try {
-    const res = await fetch(`${API}/feynman-evaluate/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: topic, explanation: exp })
-    });
-    const data = await res.json();
-    loader.style.display = "none";
-    feedback.style.display = "block";
-    feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-      <h4 style="color:var(--green); margin:0;">AI Feedback</h4>
-      <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
-    </div>
-    <div>${marked.parse(data.feedback || "No feedback returned.")}</div>`;
-  } catch (err) {
-    loader.style.display = "none";
-    feedback.style.display = "block";
-    feedback.innerHTML = `<em style='color:var(--red)'>Failed to connect to server.</em>`;
   }
 }
 </script>
