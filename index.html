@@ -664,14 +664,12 @@ main.wide {
 }
 .mermaid {
   min-width: 100%;
-  min-height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
+  text-align: center;
   padding: 40px;
 }
 .mermaid svg {
-  width: auto !important; /* Respect the natural width calculated by Mermaid */
+  width: max-content !important; /* Respect the natural width calculated by Mermaid */
   max-width: none !important;
   height: auto !important;
 }
