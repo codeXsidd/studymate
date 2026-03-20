@@ -68,10 +68,13 @@ def extract_json_array(raw: str) -> list:
 
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    index_path = os.path.join(os.path.dirname(__file__), "..", "index.html")
-    
-    with open(index_path, "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+    index_path = "index.html"
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    return HTMLResponse("<h2>StudyMate API is running.</h2>")
+
+
 # 🔥 FIXED UPLOAD (IMPORTANT)
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
@@ -150,7 +153,8 @@ async def ai_tutor(data: TutorRequest):
         if not data.question.strip():
             raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
-        context = f"\n\nContext:\n{stored_text[:2000]}" if stored_text else ""
+        context_text = get_stored_text()
+        context = f"\n\nContext:\n{context_text[:2000]}" if context_text else ""
 
         prompt = (
             f"You are a friendly tutor. Explain clearly with examples.\n\n"
@@ -174,7 +178,8 @@ class TopicRequest(BaseModel):
 @app.post("/explain-topic/")
 async def explain_topic(data: TopicRequest):
     try:
-        context = f"\n\nContext:\n{stored_text[:2000]}" if stored_text else ""
+        context_text = get_stored_text()
+        context = f"\n\nContext:\n{context_text[:2000]}" if context_text else ""
 
         prompt = (
             f"Explain {data.topic} simply with bullets, example, and summary.\n"
@@ -200,7 +205,8 @@ async def feynman_evaluate(data: FeynmanRequest):
         if not data.topic.strip() or not data.explanation.strip():
             raise HTTPException(status_code=400, detail="Topic and explanation cannot be empty.")
 
-        context = stored_text if stored_text else ""
+        context_text = get_stored_text()
+        context = context_text if context_text else ""
         feedback = evaluate_explanation(data.topic, data.explanation, context)
 
         return {"feedback": feedback}
@@ -213,14 +219,17 @@ async def feynman_evaluate(data: FeynmanRequest):
 @app.post("/generate-mindmap/")
 async def generate_mindmap_endpoint():
     try:
-        if not stored_text:
+        context_text = get_stored_text()
+        if not context_text:
             raise HTTPException(status_code=400, detail="No document uploaded yet.")
 
-        mindmap_raw = generate_mindmap(stored_text)
+        mindmap_raw = generate_mindmap(context_text)
         mindmap_cleaned = mindmap_raw.replace("```mermaid", "").replace("```", "").strip()
 
         return {"mindmap": mindmap_cleaned}
 
+    except HTTPException:
+        raise
     except Exception as e:
         print("MINDMAP ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Mind map generation failed.")
@@ -236,7 +245,8 @@ async def debate_start(data: DebateStartRequest):
         if not data.topic.strip():
             raise HTTPException(status_code=400, detail="Topic cannot be empty.")
 
-        context = stored_text if stored_text else ""
+        context_text = get_stored_text()
+        context = context_text if context_text else ""
         stance = generate_debate_stance(data.topic, context)
 
         return {"stance": stance}
@@ -255,7 +265,8 @@ async def debate_rebuttal(data: DebateRebuttalRequest):
         if not data.topic.strip() or not data.rebuttal.strip():
             raise HTTPException(status_code=400, detail="Topic and rebuttal cannot be empty.")
 
-        context = stored_text if stored_text else ""
+        context_text = get_stored_text()
+        context = context_text if context_text else ""
         feedback = evaluate_debate_rebuttal(data.topic, data.rebuttal, context)
 
         return {"feedback": feedback}
