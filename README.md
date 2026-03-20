@@ -15,16 +15,11 @@ Instead of the AI lecturing you, **you teach the AI**.
 ### 🧠 **Interactive Concept Mind Maps**
 For visual learners, reading endless text can be tiring.
 - With one click, StudyMate extracts the core concepts from your document and automatically generates a beautiful, interactive **visual flowchart** natively in your browser using Mermaid.js.
-- The mind maps are presented in a **clean, fully responsive bounding box** that dynamically adapts to your screen size. SVG diagrams naturally scale while preserving layout integrity natively on both desktop and mobile devices.
 - Perfect for understanding how different concepts connect.
 
 ### 🔊 **Text-to-Speech Accessibility**
 - Read along with auditory learning! Sleek **🔊 Read** buttons are integrated throughout the application.
 - Listen to topic explanations, AI tutor answers, and quiz questions out loud to improve retention.
-
-### 🤖 **Personalized Learning & AI Tutor**
-- **Knowledge Check:** Before starting a quiz, StudyMate asks if you've studied the topic. If you're a beginner, it generates a personalized overview and explanation of the concepts first!
-- **On-Demand AI Tutor:** Stuck with a complex theory? Type a custom question and the AI Tutor will dissect it with simple analogies, examples, and summaries using your uploaded file as context.
 
 ### 📝 **AI Quiz Generation & Dashboard**
 - Intelligent extraction of 5-8 distinct study topics from your document.
