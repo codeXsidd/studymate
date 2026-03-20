@@ -742,6 +742,7 @@ main.wide {
     <div class="know-btns">
       <button class="btn btn-primary" onclick="startWithKnowledge(true)">✅ Yes, quiz me</button>
       <button class="btn btn-secondary" onclick="startWithKnowledge(false)">📖 No, explain first</button>
+      <button class="btn btn-outline" style="min-width: 44px; padding: 10px;" onclick="closeKnowledgeCheck()" title="Cancel">✕</button>
     </div>
   </div>
 </div>
@@ -1207,6 +1208,10 @@ function startWithKnowledge(knows) {
   }
 }
 
+function closeKnowledgeCheck() {
+  document.getElementById("knowModal").classList.remove("show");
+}
+
 // ═════════════════════════════════════════
 //  EXPLAIN FIRST
 // ═════════════════════════════════════════
@@ -1609,13 +1614,17 @@ async function generateMindmap() {
     if (data.mindmap) {
       container.innerHTML = `<div class="mermaid">${data.mindmap}</div>`;
       mermaid.initialize({ startOnLoad: false, theme: isLight ? 'default' : 'dark' });
-      mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      // Correct v10+ async call for Mermaid
+      await mermaid.run({ querySelector: '.mermaid' }).catch(e => {
+          console.error("Mermaid error:", e);
+          container.innerHTML += `<div style="color:var(--amber);margin-top:10px;text-align:center;">Note: AI generated a slightly malformed graph, but we tried to render it.</div>`;
+      });
     } else {
-      container.innerHTML = `<div style="color:var(--red)">Failed to generate map.</div>`;
+      container.innerHTML = `<div style="color:var(--red);text-align:center;padding:20px;">Failed to generate map.</div>`;
     }
   } catch (err) {
     loader.style.display = "none";
-    container.innerHTML = `<div style="color:var(--red)">❌ ${err.message || "Error connecting to server."}</div>`;
+    container.innerHTML = `<div style="color:var(--red);text-align:center;padding:20px;">❌ ${err.message || "Error connecting to server."}</div>`;
   }
 }
 
