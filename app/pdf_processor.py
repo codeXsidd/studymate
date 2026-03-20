@@ -1,9 +1,11 @@
+from io import BytesIO
 import PyPDF2
 
-def extract_text_from_pdf(path):
+def extract_text_from_pdf(contents):
+    pdf = PyPDF2.PdfReader(BytesIO(contents))
     text = ""
-    with open(path, "rb") as f:
-        reader = PyPDF2.PdfReader(f)
-        for page in reader.pages:
-            text += page.extract_text() or ""
+
+    for page in pdf.pages:
+        text += page.extract_text() or ""
+
     return text
