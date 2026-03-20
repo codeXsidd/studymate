@@ -695,6 +695,7 @@ main.wide {
   </div>
   <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
 </nav>
+
 <section style="text-align:center; padding:60px 20px;">
   
   <h1 style="font-size:42px; color:#38bdf8;">
@@ -775,6 +776,18 @@ main.wide {
       <button class="btn btn-primary" onclick="uploadPDF()" id="uploadBtn">⬆ Upload PDF</button>
     </div>
   </div>
+  <!-- ⚡ FAST POINTS -->
+<div class="card">
+  <div class="card-title"><span class="icon">⚡</span> Fast Points</div>
+
+  <div class="btn-row" style="justify-content:center;">
+    <button class="btn btn-primary" onclick="generatePoints()">
+      Generate Key Points
+    </button>
+  </div>
+
+  <div id="pointsOutput" style="margin-top:15px;"></div>
+</div>
 
   <!-- Topics -->
   <div class="card" id="topicsCard" style="display:none">
@@ -1146,7 +1159,6 @@ async function uploadPDF() {
   const btn = document.getElementById("uploadBtn");
   btn.disabled = true; btn.textContent = "Uploading…";
 
-  // Animate progress bar
   const prog = document.getElementById("uploadProgress");
   const bar = document.getElementById("uploadProgressBar");
   prog.style.display = "block"; bar.style.width = "0%";
@@ -1159,9 +1171,13 @@ async function uploadPDF() {
   try {
     const formData = new FormData();
     formData.append("file", file);
+
     const res = await fetch(`${API}/upload-pdf/`, { method: "POST", body: formData });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || "Upload failed");
+
+    // ✅🔥 ADD THIS LINE (VERY IMPORTANT)
+    window.pdfText = data.text;
 
     clearInterval(fakeProgress);
     bar.style.width = "100%";
@@ -1170,6 +1186,7 @@ async function uploadPDF() {
     renderTopics(data.detected_topics);
     renderDebateTopics();
     showToast("✅ PDF uploaded! " + data.detected_topics.length + " topics found");
+
   } catch (err) {
     clearInterval(fakeProgress);
     prog.style.display = "none";
@@ -1179,6 +1196,7 @@ async function uploadPDF() {
     btn.disabled = false; btn.textContent = "⬆ Upload PDF";
   }
 }
+
 
 function renderTopics(topics) {
   state.topics = topics;
@@ -1806,6 +1824,9 @@ async function submitDebateRebuttal() {
   }
 }
 
+// ═════════════════════════════════════════
+// FLASHCARDS
+// ═════════════════════════════════════════
 async function generateFlashcards() {
   const text = document.getElementById("flashInput").value;
 
@@ -1830,6 +1851,38 @@ async function generateFlashcards() {
 
   document.getElementById("flashOutput").innerHTML = html;
 }
+
+
+// ═════════════════════════════════════════
+// ⚡ FAST POINTS (FIXED)
+// ═════════════════════════════════════════
+async function generatePoints() {
+  const text = window.pdfText || "";
+
+  if (!text) {
+    alert("Upload PDF first bro!");
+    return;
+  }
+
+  const res = await fetch("/generate-points", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ text })
+  });
+
+  const data = await res.json();
+
+  let html = "<h3>⚡ Key Points</h3><ul>";
+
+  data.points.forEach(p => {
+    html += `<li>${p}</li>`;
+  });
+
+  html += "</ul>";
+
+  document.getElementById("pointsOutput").innerHTML = html;
+}
+
 
 </script>
 </body>
