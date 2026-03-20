@@ -117,6 +117,10 @@ main{
   margin:0 auto;
   padding:40px 24px 80px;
   position:relative;z-index:1;
+  transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+main.wide {
+  max-width: 95%;
 }
 
 /* ───────── SECTION PAGES ───────── */
@@ -642,7 +646,8 @@ main{
 /* ───────── MIND MAP VISIBILITY ───────── */
 #mindmapContainer {
   overflow: auto;
-  min-height: 75vh;
+  min-height: 40vh; /* Allow it to be smaller but not completely collapsed */
+  height: fit-content;
   max-height: 85vh;
   width: 100%;
   background: var(--surface2);
@@ -657,18 +662,16 @@ main{
 }
 .mermaid {
   min-width: 100%;
-  width: max-content;
-  display: inline-block;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 40px;
-  text-align: center;
 }
 .mermaid svg {
   width: auto !important; /* Respect the natural width calculated by Mermaid */
-  min-width: 1600px !important; /* Force a large minimum width so text is readable */
   max-width: none !important;
   height: auto !important;
-  transform: scale(1.15);
-  transform-origin: top center;
 }
 </style>
 </head>
@@ -978,6 +981,13 @@ function showPage(id) {
   const map = { home: 0, mindmap: 1, feynman: 2, tutor: 3, dashboard: 4 };
   if(tabs[map[id]]) tabs[map[id]].classList.add("active");
   if (id === "dashboard") renderDashboard();
+  
+  const mainEl = document.querySelector("main");
+  if (id === "mindmap") {
+    mainEl.classList.add("wide");
+  } else {
+    mainEl.classList.remove("wide");
+  }
 }
 
 // ═════════════════════════════════════════
