@@ -1014,6 +1014,20 @@ main.wide {
     </div>
   </div>
 </div>
+<section style="padding:40px;">
+  <h2>🧠 Flashcards Generator</h2>
+
+  <textarea id="flashInput" rows="5" style="width:100%; padding:10px;"
+    placeholder="Paste your notes here..."></textarea>
+
+  <br><br>
+
+  <button onclick="generateFlashcards()">
+    Generate Flashcards
+  </button>
+
+  <div id="flashOutput"></div>
+</section>
 
 </main>
 
@@ -1791,6 +1805,32 @@ async function submitDebateRebuttal() {
     feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit rebuttal."}</em>`;
   }
 }
+
+async function generateFlashcards() {
+  const text = document.getElementById("flashInput").value;
+
+  const res = await fetch("/generate-flashcards", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text })
+  });
+
+  const data = await res.json();
+
+  let html = "";
+
+  data.flashcards.forEach(card => {
+    html += `
+      <div style="border:1px solid #38bdf8; padding:15px; margin:10px; border-radius:8px;">
+        <b>Q:</b> ${card.question}<br>
+        <b>A:</b> ${card.answer}
+      </div>
+    `;
+  });
+
+  document.getElementById("flashOutput").innerHTML = html;
+}
+
 </script>
 </body>
 </html>

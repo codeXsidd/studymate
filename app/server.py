@@ -324,3 +324,20 @@ async def debate_rebuttal(data: DebateRebuttalRequest):
     except Exception as e:
         print("DEBATE REBUTTAL ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Debate rebuttal failed.")
+@app.post("/generate-flashcards")
+async def generate_flashcards(data: dict):
+    text = data.get("text", "")
+
+    # Simple logic (we upgrade later with AI)
+    sentences = text.split(".")
+
+    flashcards = []
+    for s in sentences[:5]:
+        s = s.strip()
+        if s:
+            flashcards.append({
+                "question": f"What is {s.split()[0]}?",
+                "answer": s
+            })
+
+    return {"flashcards": flashcards}
