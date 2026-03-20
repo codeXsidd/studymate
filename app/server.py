@@ -68,7 +68,7 @@ def extract_json_array(raw: str) -> list:
 
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    index_path = "index.html"
+    index_path = os.path.join(os.path.dirname(__file__), "..", "index.html")
     if os.path.exists(index_path):
         with open(index_path, "r", encoding="utf-8") as f:
             return f.read()
