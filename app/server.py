@@ -260,7 +260,7 @@ async def generate_mindmap_endpoint():
         raise
     except Exception as e:
         print("MINDMAP ERROR:", str(e))
-        raise HTTPException(status_code=500, detail="Mind map generation failed.")
+        raise HTTPException(status_code=500, detail=f"Mind map generation failed: {str(e)} -- Type: {type(e).__name__}")
 
 
 # ───────── DEBATE AI ─────────
