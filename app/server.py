@@ -2,12 +2,21 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
 import shutil, os, json, re, uuid
 
 from app.ai_engine import generate_response, classify_topics, generate_quiz
 from app.pdf_processor import extract_text_from_pdf
 
 app = FastAPI(title="StudyMate API", version="2.1")
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/static", StaticFiles(directory=".", html=True), name="static")
+from fastapi.responses import FileResponse
+
+@app.get("/sitemap.xml")
+async def sitemap():
+    return FileResponse("sitemap.xml", media_type="application/xml")
 
 # ✅ CORS (IMPORTANT FOR MOBILE + RENDER)
 app.add_middleware(
