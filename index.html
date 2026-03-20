@@ -15,8 +15,8 @@
 
 :root{
   --bg:#0e1117;
-  --surface:#161b27;
-  --surface2:#1d2535;
+  --surface:rgba(22,27,39,0.78);
+  --surface2:rgba(29,37,53,0.78);
   --border:#252d3f;
   --green:#3bdc8c;
   --green-dim:#2ab872;
@@ -31,10 +31,31 @@
 
 body{
   font-family:'DM Sans',sans-serif;
-  background:var(--bg);
+  background-color:var(--bg);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(59,220,140,0.06), transparent 30%),
+    radial-gradient(circle at 85% 30%, rgba(91,154,245,0.06), transparent 30%);
   color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
+  scroll-behavior: smooth;
+}
+
+/* ───────── SCROLLBAR ───────── */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }
 
 /* Subtle grid overlay */
@@ -141,9 +162,10 @@ main{
   line-height:1.7;
 }
 
-/* ───────── CARDS ───────── */
 .card{
   background:var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border:1px solid var(--border);
   border-radius:var(--radius);
   padding:28px;
@@ -218,8 +240,13 @@ main{
 }
 .btn-primary{
   background:var(--green);color:#0e1117;
+  box-shadow: 0 0 16px rgba(59,220,140,0.25);
 }
-.btn-primary:hover{background:var(--green-dim);transform:translateY(-1px)}
+.btn-primary:hover{
+  background:var(--green-dim);
+  transform:translateY(-2px);
+  box-shadow: 0 0 24px rgba(59,220,140,0.45);
+}
 .btn-secondary{
   background:var(--surface2);color:var(--text);
   border:1px solid var(--border);
@@ -448,21 +475,28 @@ main{
   line-height:1.75;
   display:none;
 }
-.tutor-answer h1,.tutor-answer h2,.tutor-answer h3{
+.tutor-answer h1, .tutor-answer h2, .tutor-answer h3,
+.explanation-panel h1, .explanation-panel h2, .explanation-panel h3 {
   font-family:'Syne',sans-serif;margin-bottom:10px;margin-top:16px;
 }
-.tutor-answer code{
-  background:rgba(59,220,140,.1);
-  padding:2px 7px;border-radius:5px;
+.tutor-answer code, .explanation-panel code {
+  background:rgba(59,220,140,.12);
+  padding:2px 6px;border-radius:5px;
   font-size:.85rem;color:var(--green);
+  font-family: monospace;
 }
-.tutor-answer pre{
+.tutor-answer pre, .explanation-panel pre {
   background:var(--bg);
   padding:16px;border-radius:10px;
+  border:1px solid var(--border);
   overflow-x:auto;margin:12px 0;
 }
-.tutor-answer ul,.tutor-answer ol{padding-left:22px;margin:8px 0}
-.tutor-answer li{margin-bottom:4px}
+.tutor-answer ul, .tutor-answer ol, .explanation-panel ul, .explanation-panel ol {
+  padding-left:22px;margin:8px 0;
+}
+.tutor-answer li, .explanation-panel li {
+  margin-bottom:6px;
+}
 
 .thinking{
   display:none;
@@ -554,10 +588,13 @@ main{
   height:1px;background:var(--border);margin:24px 0;
 }
 .empty-state{
-  text-align:center;padding:40px 24px;
-  color:var(--muted);font-size:.9rem;
+  text-align:center;padding:50px 24px;
+  color:var(--muted);font-size:.95rem;
+  background:var(--surface2);
+  border-radius:var(--radius);
+  border:1px dashed var(--border);
 }
-.empty-state .empty-icon{font-size:2.5rem;margin-bottom:12px}
+.empty-state .empty-icon{font-size:2.8rem;margin-bottom:14px; opacity:0.8;}
 
 .difficulty-row{
   display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;
@@ -605,13 +642,15 @@ main{
 /* ───────── MIND MAP VISIBILITY ───────── */
 #mindmapContainer {
   overflow: auto;
-  max-height: 75vh;
+  min-height: 75vh;
+  max-height: 85vh;
   width: 100%;
   background: var(--surface2);
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   position: relative;
   cursor: grab;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
 }
 #mindmapContainer:active {
   cursor: grabbing;
@@ -625,10 +664,10 @@ main{
 }
 .mermaid svg {
   width: auto !important; /* Respect the natural width calculated by Mermaid */
-  min-width: 1400px !important; /* Force a large minimum width so text is readable */
+  min-width: 1600px !important; /* Force a large minimum width so text is readable */
   max-width: none !important;
   height: auto !important;
-  transform: scale(1.1);
+  transform: scale(1.15);
   transform-origin: top center;
 }
 </style>
@@ -950,8 +989,8 @@ function toggleTheme() {
   const r = document.documentElement.style;
   if (isLight) {
     r.setProperty("--bg","#f2f5fa");
-    r.setProperty("--surface","#ffffff");
-    r.setProperty("--surface2","#f0f3f8");
+    r.setProperty("--surface","rgba(255,255,255,0.78)");
+    r.setProperty("--surface2","rgba(240,243,248,0.78)");
     r.setProperty("--border","#dce2ef");
     r.setProperty("--text","#1a1f2e");
     r.setProperty("--muted","#6e7a94");
@@ -1019,6 +1058,7 @@ async function uploadPDF() {
     formData.append("file", file);
     const res = await fetch(`${API}/upload-pdf/`, { method: "POST", body: formData });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Upload failed");
 
     clearInterval(fakeProgress);
     bar.style.width = "100%";
@@ -1029,7 +1069,7 @@ async function uploadPDF() {
   } catch (err) {
     clearInterval(fakeProgress);
     prog.style.display = "none";
-    showToast("❌ Upload failed. Is the server running?");
+    showToast("❌ " + (err.message || "Upload failed. Is the server running?"));
     console.error(err);
   } finally {
     btn.disabled = false; btn.textContent = "⬆ Upload PDF";
@@ -1097,11 +1137,13 @@ async function explainTopic() {
       body: JSON.stringify({ topic: state.selectedTopic })
     });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Explanation failed");
+
     loader.classList.remove("show");
     content.innerHTML = marked.parse(data.explanation || "");
   } catch (err) {
     loader.classList.remove("show");
-    content.innerHTML = "<em>Failed to load explanation. Please try again.</em>";
+    content.innerHTML = `<em style="color:var(--red)">❌ ${err.message || "Failed to load explanation."}</em>`;
   }
 }
 
@@ -1127,6 +1169,7 @@ async function startQuiz() {
       body: JSON.stringify({ topic: state.selectedTopic, difficulty: state.difficulty })
     });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Quiz generation failed");
     if (btn) { btn.style.opacity = ""; btn.style.pointerEvents = ""; }
 
     if (!data.quiz || data.quiz.length === 0) {
@@ -1149,7 +1192,7 @@ async function startQuiz() {
     renderQuestion();
   } catch (err) {
     if (btn) { btn.style.opacity = ""; btn.style.pointerEvents = ""; }
-    showToast("❌ Failed to generate quiz. Is the server running?");
+    showToast("❌ " + (err.message || "Failed to generate quiz. Is the server running?"));
     console.error(err);
   }
 }
@@ -1374,6 +1417,8 @@ async function askTutor() {
       body: JSON.stringify({ question: q })
     });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "AI Tutor failed");
+
     thinking.classList.remove("show");
     ans.style.display = "block";
     ans.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
@@ -1384,7 +1429,7 @@ async function askTutor() {
   } catch (err) {
     thinking.classList.remove("show");
     ans.style.display = "block";
-    ans.innerHTML = "<em style='color:var(--red)'>Failed to connect to server.</em>";
+    ans.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to connect to server."}</em>`;
   }
 }
 
@@ -1469,17 +1514,19 @@ async function generateMindmap() {
   try {
     const res = await fetch(`${API}/generate-mindmap/`, { method: "POST" });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Mind map generation failed");
+
     loader.style.display = "none";
     if (data.mindmap) {
       container.innerHTML = `<div class="mermaid">${data.mindmap}</div>`;
       mermaid.initialize({ startOnLoad: false, theme: isLight ? 'default' : 'dark' });
       mermaid.init(undefined, document.querySelectorAll('.mermaid'));
     } else {
-      container.innerHTML = `<div style="color:var(--red)">${data.detail || "Failed to generate map."}</div>`;
+      container.innerHTML = `<div style="color:var(--red)">Failed to generate map.</div>`;
     }
   } catch (err) {
     loader.style.display = "none";
-    container.innerHTML = `<div style="color:var(--red)">Error connecting to server.</div>`;
+    container.innerHTML = `<div style="color:var(--red)">❌ ${err.message || "Error connecting to server."}</div>`;
   }
 }
 
@@ -1540,6 +1587,8 @@ async function submitFeynman() {
       body: JSON.stringify({ topic: topic, explanation: exp })
     });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Evaluation failed");
+
     loader.style.display = "none";
     feedback.style.display = "block";
     if (data.feedback) {
@@ -1549,12 +1598,12 @@ async function submitFeynman() {
       </div>
       <div>${marked.parse(data.feedback)}</div>`;
     } else {
-      feedback.innerHTML = `<em style='color:var(--red)'>${data.detail || "No feedback returned."}</em>`;
+      feedback.innerHTML = `<em style='color:var(--red)'>No feedback returned.</em>`;
     }
   } catch (err) {
     loader.style.display = "none";
     feedback.style.display = "block";
-    feedback.innerHTML = `<em style='color:var(--red)'>Failed to connect to server.</em>`;
+    feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to connect to server."}</em>`;
   }
 }
 </script>
