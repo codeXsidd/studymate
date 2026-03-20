@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://studymate-j9im.onrender.com/sitemap.xml
