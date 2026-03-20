@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import shutil, os, json, re, uuid
 
-from app.ai_engine import generate_response, classify_topics, generate_quiz, evaluate_explanation, generate_mindmap, generate_debate_stance, evaluate_debate_rebuttal
+from app.ai_engine import generate_response, classify_topics, generate_quiz
 from app.pdf_processor import extract_text_from_pdf
 
 app = FastAPI(title="StudyMate API", version="2.1")
