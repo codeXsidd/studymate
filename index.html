@@ -685,6 +685,7 @@ main.wide {
     <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
     <button class="nav-tab" onclick="showPage('mindmap')">🧠 Mind Map</button>
     <button class="nav-tab" onclick="showPage('feynman')">🎓 Feynman</button>
+    <button class="nav-tab" onclick="showPage('debate')">🤺 Debate AI</button>
     <button class="nav-tab" onclick="showPage('tutor')">🤖 Tutor</button>
     <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
   </div>
@@ -937,6 +938,41 @@ main.wide {
   </div>
 </div>
 
+<!-- ═══════ DEBATE PAGE ═══════ -->
+<div class="page" id="debatePage">
+  <div style="padding-top:12px;margin-bottom:28px">
+    <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:6px">Debate the AI 🤺</div>
+    <div style="font-size:.9rem;color:var(--muted)">Test your reading comprehension by correcting the AI's intentionally flawed arguments!</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">⚔️</span> Choose a Topic to Debate</div>
+    <div class="btn-row" id="debateTopicsList" style="margin-bottom:10px;">
+      <div class="empty-state" style="width:100%"><div class="empty-icon">📄</div>Upload a PDF first to find topics to debate</div>
+    </div>
+    
+    <div id="debateArena" style="display:none; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
+      <div style="background: rgba(242,92,92,.06); border-left: 3px solid var(--red); padding: 18px 24px; border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 24px;">
+        <h4 style="color:var(--red); font-family:'Syne',sans-serif; margin-bottom: 8px;">AI's Flawed Argument:</h4>
+        <div id="debateStanceText" style="font-size: 0.95rem; line-height: 1.6;"></div>
+      </div>
+      
+      <div class="card-title"><span class="icon">🛡️</span> Your Rebuttal:</div>
+      <textarea id="debateRebuttal" class="tutor-input" placeholder="Explain precisely why the AI is wrong using facts from your material..." rows="4" style="width:100%;"></textarea>
+      
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-primary" onclick="submitDebateRebuttal()" id="debateSubmitBtn">Counter-Argue ✦</button>
+      </div>
+      
+      <div class="thinking" id="debateLoader" style="display:none; margin-top:20px;">
+        <div class="dot-anim"><span></span><span></span><span></span></div>
+        <span id="debateLoaderText">AI is preparing its argument…</span>
+      </div>
+      
+      <div class="tutor-answer" id="debateFeedback" style="display:none; margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- TOAST -->
@@ -979,7 +1015,7 @@ function showPage(id) {
   document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
   document.getElementById(id + "Page").classList.add("active");
   const tabs = document.querySelectorAll(".nav-tab");
-  const map = { home: 0, mindmap: 1, feynman: 2, tutor: 3, dashboard: 4 };
+  const map = { home: 0, mindmap: 1, feynman: 2, debate: 3, tutor: 4, dashboard: 5 };
   if(tabs[map[id]]) tabs[map[id]].classList.add("active");
   if (id === "dashboard") renderDashboard();
   
@@ -1076,6 +1112,7 @@ async function uploadPDF() {
     setTimeout(() => { prog.style.display = "none"; }, 700);
 
     renderTopics(data.detected_topics);
+    renderDebateTopics();
     showToast("✅ PDF uploaded! " + data.detected_topics.length + " topics found");
   } catch (err) {
     clearInterval(fakeProgress);
@@ -1615,6 +1652,93 @@ async function submitFeynman() {
     loader.style.display = "none";
     feedback.style.display = "block";
     feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to connect to server."}</em>`;
+  }
+}
+
+// ═════════════════════════════════════════
+//  DEBATE AI
+// ═════════════════════════════════════════
+function renderDebateTopics() {
+  const container = document.getElementById("debateTopicsList");
+  if (state.topics.length === 0) return;
+  
+  container.innerHTML = state.topics.map(t => 
+    `<button class="topic-chip" onclick="startDebate('${t}')"><span>💬</span> ${t}</button>`
+  ).join("");
+}
+
+let activeDebateTopic = "";
+
+async function startDebate(topic) {
+  activeDebateTopic = topic;
+  const arena = document.getElementById("debateArena");
+  const stanceText = document.getElementById("debateStanceText");
+  const loader = document.getElementById("debateLoader");
+  const loaderText = document.getElementById("debateLoaderText");
+  const feedback = document.getElementById("debateFeedback");
+  const topicChips = document.getElementById("debateTopicsList").querySelectorAll(".topic-chip");
+  
+  topicChips.forEach(chip => {
+    chip.style.opacity = chip.textContent.includes(topic) ? "1" : "0.5";
+    chip.style.borderColor = chip.textContent.includes(topic) ? "var(--green)" : "var(--border)";
+  });
+  
+  arena.style.display = "block";
+  stanceText.innerHTML = "";
+  feedback.style.display = "none";
+  document.getElementById("debateRebuttal").value = "";
+  
+  loaderText.textContent = "AI is preparing its flawed argument…";
+  loader.style.display = "flex";
+  
+  try {
+    const res = await fetch(`${API}/debate-start/`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: topic })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Debate start failed");
+    
+    loader.style.display = "none";
+    stanceText.innerHTML = marked.parse(data.stance);
+  } catch (err) {
+    loader.style.display = "none";
+    stanceText.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to start debate."}</em>`;
+  }
+}
+
+async function submitDebateRebuttal() {
+  const rebuttal = document.getElementById("debateRebuttal").value.trim();
+  if (!rebuttal) { showToast("⚠ Please enter your counter-argument."); return; }
+  
+  const loader = document.getElementById("debateLoader");
+  const loaderText = document.getElementById("debateLoaderText");
+  const feedback = document.getElementById("debateFeedback");
+  
+  feedback.style.display = "none";
+  loaderText.textContent = "AI is evaluating your rebuttal…";
+  loader.style.display = "flex";
+  
+  try {
+    const res = await fetch(`${API}/debate-rebuttal/`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: activeDebateTopic, rebuttal: rebuttal })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Debate rebuttal failed");
+    
+    loader.style.display = "none";
+    feedback.style.display = "block";
+    feedback.style.borderLeft = "3px solid var(--blue)";
+    feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+      <h4 style="color:var(--blue); margin:0;">AI's Response to You</h4>
+      <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
+    </div>
+    <div>${marked.parse(data.feedback)}</div>`;
+  } catch (err) {
+    loader.style.display = "none";
+    feedback.style.display = "block";
+    feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit rebuttal."}</em>`;
   }
 }
 </script>

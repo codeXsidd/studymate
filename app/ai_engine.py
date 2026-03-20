@@ -99,3 +99,40 @@ Text:
 {text[:4000]}
 """
     return generate_response(prompt)
+
+
+def generate_debate_stance(topic: str, context: str = "") -> str:
+    """Generate a plausible but incorrect stance on a topic to challenge the user."""
+    prompt = f"""
+You are acting as an AI Debater who is intentionally taking a flawed, provocative, or slightly incorrect stance on the topic: "{topic}".
+Your goal is to challenge the user. Make an argument that sounds confident and plausible, but contains a fundamental misunderstanding or error based on the concepts in the provided context.
+
+Context from course material:
+{context[:3000]}
+
+Rules:
+1. Speak directly to the user in a challenging but friendly tone (e.g., "I actually don't think [topic] is that important because...").
+2. Your argument MUST be noticeably flawed or incomplete according to the context provided.
+3. Keep it to 2-3 short paragraphs max.
+"""
+    return generate_response(prompt)
+
+
+def evaluate_debate_rebuttal(topic: str, user_rebuttal: str, context: str = "") -> str:
+    """Evaluate if the user successfully countered the AI's flawed argument."""
+    prompt = f"""
+You previously took a flawed stance on the topic: "{topic}".
+The user has provided a rebuttal to correct you.
+
+User's Rebuttal:
+"{user_rebuttal}"
+
+Context from course material:
+{context[:3000]}
+
+If the user's rebuttal correctly identifies your flaw and uses facts from the context, concede defeat gracefully, praise their understanding, and declare them the winner!
+If their rebuttal is weak, incorrect, or misses the point, push back slightly, explain what they missed, and let them know they haven't won the debate yet.
+
+Output your response as if you are the AI Debater reacting to them. Format using markdown.
+"""
+    return generate_response(prompt)
