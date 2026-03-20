@@ -137,7 +137,7 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     return {
         "detected_topics": topics,
-        "text": extracted_text   # ✅ ADD THIS LINE
+        
     }
 
 @app.post("/quiz/")
