@@ -17,6 +17,11 @@ from fastapi.responses import FileResponse
 @app.get("/sitemap.xml")
 async def sitemap():
     return FileResponse("sitemap.xml", media_type="application/xml")
+from fastapi.responses import FileResponse
+
+@app.get("/robots.txt")
+async def robots():
+    return FileResponse("robots.txt", media_type="text/plain")
 
 # ✅ CORS (IMPORTANT FOR MOBILE + RENDER)
 app.add_middleware(
