@@ -605,18 +605,31 @@ main{
 /* ───────── MIND MAP VISIBILITY ───────── */
 #mindmapContainer {
   overflow: auto;
-  max-height: 70vh;
+  max-height: 75vh;
   width: 100%;
+  background: var(--surface2);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: grab;
+}
+#mindmapContainer:active {
+  cursor: grabbing;
 }
 .mermaid {
-  min-width: 900px;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
+  min-width: 100%;
+  width: max-content;
+  display: inline-block;
+  padding: 40px;
+  text-align: center;
 }
 .mermaid svg {
+  width: auto !important; /* Respect the natural width calculated by Mermaid */
+  min-width: 1400px !important; /* Force a large minimum width so text is readable */
   max-width: none !important;
   height: auto !important;
+  transform: scale(1.1);
+  transform-origin: top center;
 }
 </style>
 </head>
@@ -849,7 +862,7 @@ main{
       <div class="dot-anim"><span></span><span></span><span></span></div>
       <span>Generating visual map…</span>
     </div>
-    <div id="mindmapContainer" style="overflow:-moz-scrollbars-vertical; overflow-x:auto; text-align:center; background:var(--surface2); padding:20px; border-radius:10px; border:1px solid var(--border);">
+    <div id="mindmapContainer">
       <div class="empty-state"><div class="empty-icon">📊</div>Upload a PDF and generate the map</div>
     </div>
   </div>
@@ -1469,6 +1482,43 @@ async function generateMindmap() {
     container.innerHTML = `<div style="color:var(--red)">Error connecting to server.</div>`;
   }
 }
+
+// ═════════════════════════════════════════
+//  MIND MAP DRAG TO SCROLL
+// ═════════════════════════════════════════
+const ele = document.getElementById('mindmapContainer');
+ele.style.cursor = 'grab';
+
+let pos = { top: 0, left: 0, x: 0, y: 0 };
+
+const mouseDownHandler = function(e) {
+    ele.style.cursor = 'grabbing';
+    ele.style.userSelect = 'none';
+    pos = {
+        left: ele.scrollLeft,
+        top: ele.scrollTop,
+        x: e.clientX,
+        y: e.clientY,
+    };
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+};
+
+const mouseMoveHandler = function(e) {
+    const dx = e.clientX - pos.x;
+    const dy = e.clientY - pos.y;
+    ele.scrollTop = pos.top - dy;
+    ele.scrollLeft = pos.left - dx;
+};
+
+const mouseUpHandler = function() {
+    ele.style.cursor = 'grab';
+    ele.style.removeProperty('user-select');
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+};
+
+ele.addEventListener('mousedown', mouseDownHandler);
 
 // ═════════════════════════════════════════
 //  FEYNMAN TECHNIQUE
