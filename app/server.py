@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import shutil, os, json, re, uuid
 
-from app.ai_engine import generate_response, classify_topics, generate_quiz, evaluate_explanation, generate_mindmap
+from app.ai_engine import generate_response, classify_topics, generate_quiz, evaluate_explanation, generate_mindmap, generate_debate_stance, evaluate_debate_rebuttal
 from app.pdf_processor import extract_text_from_pdf
 
 app = FastAPI(title="StudyMate API", version="2.1")
@@ -227,3 +227,42 @@ async def generate_mindmap_endpoint():
     except Exception as e:
         print("MINDMAP ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Mind map generation failed.")
+
+
+# ───────── DEBATE AI ─────────
+class DebateStartRequest(BaseModel):
+    topic: str
+
+@app.post("/debate-start/")
+async def debate_start(data: DebateStartRequest):
+    try:
+        if not data.topic.strip():
+            raise HTTPException(status_code=400, detail="Topic cannot be empty.")
+
+        context = stored_text if stored_text else ""
+        stance = generate_debate_stance(data.topic, context)
+
+        return {"stance": stance}
+
+    except Exception as e:
+        print("DEBATE START ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Debate start failed.")
+
+class DebateRebuttalRequest(BaseModel):
+    topic: str
+    rebuttal: str
+
+@app.post("/debate-rebuttal/")
+async def debate_rebuttal(data: DebateRebuttalRequest):
+    try:
+        if not data.topic.strip() or not data.rebuttal.strip():
+            raise HTTPException(status_code=400, detail="Topic and rebuttal cannot be empty.")
+
+        context = stored_text if stored_text else ""
+        feedback = evaluate_debate_rebuttal(data.topic, data.rebuttal, context)
+
+        return {"feedback": feedback}
+
+    except Exception as e:
+        print("DEBATE REBUTTAL ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Debate rebuttal failed.")
