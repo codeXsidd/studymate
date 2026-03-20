@@ -1,3 +1,4 @@
+from fastapi.responses import FileResponse
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
@@ -17,11 +18,28 @@ from fastapi.responses import FileResponse
 @app.get("/sitemap.xml")
 async def sitemap():
     return FileResponse("sitemap.xml", media_type="application/xml")
-from fastapi.responses import FileResponse
+
 
 @app.get("/robots.txt")
 async def robots():
     return FileResponse("robots.txt", media_type="text/plain")
+from fastapi.responses import FileResponse
+
+@app.get("/")
+def home():
+    return FileResponse("index.html")
+
+@app.get("/about")
+def about():
+    return FileResponse("about.html")
+
+@app.get("/features")
+def features():
+    return FileResponse("features.html")
+
+@app.get("/how-it-works")
+def how_it_works():
+    return FileResponse("how-it-works.html")
 
 # ✅ CORS (IMPORTANT FOR MOBILE + RENDER)
 app.add_middleware(

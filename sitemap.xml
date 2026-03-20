@@ -4,7 +4,18 @@
 
   <url>
     <loc>https://studymate-j9im.onrender.com/</loc>
-    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://studymate-j9im.onrender.com/about</loc>
+  </url>
+
+  <url>
+    <loc>https://studymate-j9im.onrender.com/features</loc>
+  </url>
+
+  <url>
+    <loc>https://studymate-j9im.onrender.com/how-it-works</loc>
   </url>
 
 </urlset>
