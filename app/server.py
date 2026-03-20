@@ -128,17 +128,47 @@ def get_stored_text() -> str:
 # 🔥 FIXED UPLOAD (IMPORTANT)
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
-    contents = await file.read()
+    try:
+        if not file.filename.endswith(".pdf"):
+            raise HTTPException(status_code=400, detail="Only PDF files are supported.")
 
-    # Extract text from PDF (you already have this logic)
-    extracted_text = extract_text_from_pdf(contents)
+        # ✅ Unique filename (prevents overwrite issues)
+        unique_name = f"{uuid.uuid4()}_{file.filename}"
+        path = os.path.join(UPLOAD_FOLDER, unique_name)
 
-    topics = detect_topics(extracted_text)
+        with open(path, "wb") as f:
+            shutil.copyfileobj(file.file, f)
 
-    return {
-        "detected_topics": topics,
-        
-    }
+        text = extract_text_from_pdf(path)
+
+        if not text or not text.strip():
+            raise HTTPException(status_code=422, detail="Could not extract text from PDF.")
+
+        global stored_text, stored_topics
+        stored_text = text
+
+        topics_raw = classify_topics(text)
+
+        topics = []
+        for line in topics_raw.split("\n"):
+            line = re.sub(r"^\s*[\d\-\*\.]+\s*", "", line).strip()
+            if line and len(line) > 2:
+                topics.append(line)
+
+        stored_topics = topics[:8]
+
+        return {"detected_topics": stored_topics}
+
+    except Exception as e:
+        print("UPLOAD ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Upload failed on server.")
+
+
+# ───────── QUIZ ─────────
+class QuizRequest(BaseModel):
+    topic: str
+    difficulty: str = "easy"
+
 
 @app.post("/quiz/")
 async def quiz(data: QuizRequest):
@@ -294,32 +324,3 @@ async def debate_rebuttal(data: DebateRebuttalRequest):
     except Exception as e:
         print("DEBATE REBUTTAL ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Debate rebuttal failed.")
-@app.post("/generate-flashcards")
-async def generate_flashcards(data: dict):
-    text = data.get("text", "")
-
-    # Simple logic (we upgrade later with AI)
-    sentences = text.split(".")
-
-    flashcards = []
-    for s in sentences[:5]:
-        s = s.strip()
-        if s:
-            flashcards.append({
-                "question": f"What is {s.split()[0]}?",
-                "answer": s
-            })
-
-    return {"flashcards": flashcards}
-@app.post("/generate-points")
-async def generate_points(data: dict):
-    text = data.get("text", "")
-
-    sentences = text.split(".")
-    
-    points = []
-    for s in sentences[:5]:
-        if s.strip():
-            points.append(s.strip())
-
-    return {"points": points}

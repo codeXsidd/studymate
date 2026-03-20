@@ -695,7 +695,6 @@ main.wide {
   </div>
   <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
 </nav>
-
 <section style="text-align:center; padding:60px 20px;">
   
   <h1 style="font-size:42px; color:#38bdf8;">
@@ -776,7 +775,6 @@ main.wide {
       <button class="btn btn-primary" onclick="uploadPDF()" id="uploadBtn">⬆ Upload PDF</button>
     </div>
   </div>
-  <!-- ⚡ FAST POINTS -->
 
   <!-- Topics -->
   <div class="card" id="topicsCard" style="display:none">
@@ -1016,20 +1014,6 @@ main.wide {
     </div>
   </div>
 </div>
-<section style="padding:40px;">
-  <h2>🧠 Flashcards Generator</h2>
-
-  <textarea id="flashInput" rows="5" style="width:100%; padding:10px;"
-    placeholder="Paste your notes here..."></textarea>
-
-  <br><br>
-
-  <button onclick="generateFlashcards()">
-    Generate Flashcards
-  </button>
-
-  <div id="flashOutput"></div>
-</section>
 
 </main>
 
@@ -1148,6 +1132,7 @@ async function uploadPDF() {
   const btn = document.getElementById("uploadBtn");
   btn.disabled = true; btn.textContent = "Uploading…";
 
+  // Animate progress bar
   const prog = document.getElementById("uploadProgress");
   const bar = document.getElementById("uploadProgressBar");
   prog.style.display = "block"; bar.style.width = "0%";
@@ -1160,13 +1145,9 @@ async function uploadPDF() {
   try {
     const formData = new FormData();
     formData.append("file", file);
-
     const res = await fetch(`${API}/upload-pdf/`, { method: "POST", body: formData });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || "Upload failed");
-
-    // ✅🔥 ADD THIS LINE (VERY IMPORTANT)
-    window.pdfText = data.text;
 
     clearInterval(fakeProgress);
     bar.style.width = "100%";
@@ -1175,7 +1156,6 @@ async function uploadPDF() {
     renderTopics(data.detected_topics);
     renderDebateTopics();
     showToast("✅ PDF uploaded! " + data.detected_topics.length + " topics found");
-
   } catch (err) {
     clearInterval(fakeProgress);
     prog.style.display = "none";
@@ -1185,7 +1165,6 @@ async function uploadPDF() {
     btn.disabled = false; btn.textContent = "⬆ Upload PDF";
   }
 }
-
 
 function renderTopics(topics) {
   state.topics = topics;
@@ -1812,37 +1791,6 @@ async function submitDebateRebuttal() {
     feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit rebuttal."}</em>`;
   }
 }
-
-// ═════════════════════════════════════════
-// FLASHCARDS
-// ═════════════════════════════════════════
-async function generateFlashcards() {
-  const text = document.getElementById("flashInput").value;
-
-  const res = await fetch("/generate-flashcards", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text })
-  });
-
-  const data = await res.json();
-
-  let html = "";
-
-  data.flashcards.forEach(card => {
-    html += `
-      <div style="border:1px solid #38bdf8; padding:15px; margin:10px; border-radius:8px;">
-        <b>Q:</b> ${card.question}<br>
-        <b>A:</b> ${card.answer}
-      </div>
-    `;
-  });
-
-  document.getElementById("flashOutput").innerHTML = html;
-}
-
-
-
 </script>
 </body>
 </html>
