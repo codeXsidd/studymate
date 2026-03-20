@@ -12,7 +12,8 @@ def generate_response(prompt: str, model: str = "llama-3.3-70b-versatile") -> st
             model=model,
             temperature=0.7,
         )
-        return res.choices[0].message.content
+        content = res.choices[0].message.content
+        return content if content is not None else "Error calling AI: Received empty response from model."
     except Exception as e:
         return f"Error calling AI: {str(e)}"
 

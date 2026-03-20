@@ -84,6 +84,25 @@ async def home():
     return HTMLResponse("<h2>StudyMate API is running.</h2>")
 
 
+def get_stored_text() -> str:
+    global stored_text
+    if stored_text:
+        return stored_text
+    # Fallback to recover from the latest uploaded file in the uploads directory
+    try:
+        files = os.listdir(UPLOAD_FOLDER)
+        pdfs = [f for f in files if f.endswith('.pdf')]
+        if pdfs:
+            pdfs.sort(key=lambda x: os.path.getmtime(os.path.join(UPLOAD_FOLDER, x)), reverse=True)
+            text = extract_text_from_pdf(os.path.join(UPLOAD_FOLDER, pdfs[0]))
+            if text:
+                stored_text = text
+                return stored_text
+    except Exception:
+        pass
+    return ""
+
+
 # 🔥 FIXED UPLOAD (IMPORTANT)
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
