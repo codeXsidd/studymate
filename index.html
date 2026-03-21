@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="J73CnRtnE0fQZe4z7QUAkfjWcb0v6zQhJmQVoBJM7Os" />
-<title>StudyMate — AI Study Companion</title>
 <title>StudyMate AI | AI Study Assistant</title>
 <meta name="description" content="StudyMate AI helps students generate quizzes, summaries, and mind maps using AI.">
 
@@ -691,47 +690,12 @@ main.wide {
     <button class="nav-tab" onclick="showPage('feynman')">🎓 Feynman</button>
     <button class="nav-tab" onclick="showPage('debate')">🤺 Debate AI</button>
     <button class="nav-tab" onclick="showPage('tutor')">🤖 Tutor</button>
+    <button class="nav-tab" onclick="showPage('scenario')">🌍 Scenario</button>
     <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
   </div>
   <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
 </nav>
-<section style="text-align:center; padding:60px 20px;">
-  
-  <h1 style="font-size:42px; color:#38bdf8;">
-    StudyMate AI 🚀
-  </h1>
 
-  <p style="color:#cbd5f5; max-width:600px; margin:auto; font-size:18px;">
-    Generate quizzes, summaries, and mind maps instantly using AI.
-    Study smarter, not harder.
-  </p>
-
-  <br>
-
-  <a href="/features" style="
-    background:#22c55e;
-    padding:12px 24px;
-    border-radius:8px;
-    color:black;
-    text-decoration:none;
-    font-weight:bold;
-    margin-right:10px;
-  ">
-    🚀 Explore Features
-  </a>
-
-  <a href="/how-it-works" style="
-    border:1px solid #38bdf8;
-    padding:12px 24px;
-    border-radius:8px;
-    color:#38bdf8;
-    text-decoration:none;
-    font-weight:bold;
-  ">
-    ⚙️ How it Works
-  </a>
-
-</section>
 
 <!-- KNOWLEDGE CHECK MODAL -->
 <div class="know-modal" id="knowModal">
@@ -757,6 +721,10 @@ main.wide {
     <div class="hero-badge">✦ AI-Powered Learning</div>
     <h1>Study Smarter,<br>Not <em>Harder</em></h1>
     <p>Upload any PDF, get AI-generated quizzes, personalised explanations, and track your weak areas.</p>
+    <div style="margin-top: 20px;">
+      <a href="/features" style="display:inline-block; background:#22c55e; padding:10px 20px; border-radius:8px; color:black; text-decoration:none; font-weight:bold; margin-right:10px; font-size: 0.9rem;">🚀 Explore Features</a>
+      <a href="/how-it-works" style="display:inline-block; border:1px solid #38bdf8; padding:10px 20px; border-radius:8px; color:#38bdf8; text-decoration:none; font-weight:bold; font-size: 0.9rem;">⚙️ How it Works</a>
+    </div>
   </div>
 
   <!-- Upload -->
@@ -1015,6 +983,41 @@ main.wide {
   </div>
 </div>
 
+<!-- ═══════ SCENARIO PAGE ═══════ -->
+<div class="page" id="scenarioPage">
+  <div style="padding-top:12px;margin-bottom:28px">
+    <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:6px">Scenario Simulator 🌍</div>
+    <div style="font-size:.9rem;color:var(--muted)">Apply your knowledge in a real-world roleplay</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">🌍</span> Choose a Scenario Mission</div>
+    <div class="btn-row" id="scenarioTopicsList" style="margin-bottom:10px;">
+      <div class="empty-state" style="width:100%"><div class="empty-icon">📄</div>Upload a PDF first to find missions</div>
+    </div>
+    
+    <div id="scenarioArena" style="display:none; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
+      <div style="background: rgba(59,220,140,.06); border-left: 3px solid var(--green); padding: 18px 24px; border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 24px;">
+        <h4 style="color:var(--green); font-family:'Syne',sans-serif; margin-bottom: 8px;">Incoming Transmission...</h4>
+        <div id="scenarioText" style="font-size: 0.95rem; line-height: 1.6;"></div>
+      </div>
+      
+      <div class="card-title"><span class="icon">🎯</span> Your Action / Decision:</div>
+      <textarea id="scenarioAction" class="tutor-input" placeholder="Based on your material, what is your next move?" rows="4" style="width:100%;"></textarea>
+      
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-primary" onclick="submitScenarioAction()" id="scenarioSubmitBtn">Execute Action ✦</button>
+      </div>
+      
+      <div class="thinking" id="scenarioLoader" style="display:none; margin-top:20px;">
+        <div class="dot-anim"><span></span><span></span><span></span></div>
+        <span id="scenarioLoaderText">Analyzing outcome...</span>
+      </div>
+      
+      <div class="tutor-answer" id="scenarioFeedback" style="display:none; margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- TOAST -->
@@ -1057,7 +1060,7 @@ function showPage(id) {
   document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
   document.getElementById(id + "Page").classList.add("active");
   const tabs = document.querySelectorAll(".nav-tab");
-  const map = { home: 0, mindmap: 1, feynman: 2, debate: 3, tutor: 4, dashboard: 5 };
+  const map = { home: 0, mindmap: 1, feynman: 2, debate: 3, tutor: 4, scenario: 5, dashboard: 6 };
   if(tabs[map[id]]) tabs[map[id]].classList.add("active");
   if (id === "dashboard") renderDashboard();
   
@@ -1155,6 +1158,9 @@ async function uploadPDF() {
 
     renderTopics(data.detected_topics);
     renderDebateTopics();
+    if(typeof renderScenarioTopics !== "undefined") {
+      renderScenarioTopics();
+    }
     showToast("✅ PDF uploaded! " + data.detected_topics.length + " topics found");
   } catch (err) {
     clearInterval(fakeProgress);
@@ -1789,6 +1795,93 @@ async function submitDebateRebuttal() {
     loader.style.display = "none";
     feedback.style.display = "block";
     feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit rebuttal."}</em>`;
+  }
+}
+
+// ═════════════════════════════════════════
+//  SCENARIO SIMULATOR
+// ═════════════════════════════════════════
+function renderScenarioTopics() {
+  const container = document.getElementById("scenarioTopicsList");
+  if (state.topics.length === 0) return;
+  
+  container.innerHTML = state.topics.map(t => 
+    `<button class="topic-chip" onclick="startScenario('${t}')"><span>🌍</span> ${t}</button>`
+  ).join("");
+}
+
+let activeScenarioTopic = "";
+
+async function startScenario(topic) {
+  activeScenarioTopic = topic;
+  const arena = document.getElementById("scenarioArena");
+  const sText = document.getElementById("scenarioText");
+  const loader = document.getElementById("scenarioLoader");
+  const loaderText = document.getElementById("scenarioLoaderText");
+  const feedback = document.getElementById("scenarioFeedback");
+  const topicChips = document.getElementById("scenarioTopicsList").querySelectorAll(".topic-chip");
+  
+  topicChips.forEach(chip => {
+    chip.style.opacity = chip.textContent.includes(topic) ? "1" : "0.5";
+    chip.style.borderColor = chip.textContent.includes(topic) ? "var(--green)" : "var(--border)";
+  });
+  
+  arena.style.display = "block";
+  sText.innerHTML = "";
+  feedback.style.display = "none";
+  document.getElementById("scenarioAction").value = "";
+  
+  loaderText.textContent = "Generating real-world parameters…";
+  loader.style.display = "flex";
+  
+  try {
+    const res = await fetch(`${API}/scenario-start/`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: topic })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Scenario start failed");
+    
+    loader.style.display = "none";
+    sText.innerHTML = marked.parse(data.scenario);
+  } catch (err) {
+    loader.style.display = "none";
+    sText.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to start scenario."}</em>`;
+  }
+}
+
+async function submitScenarioAction() {
+  const action = document.getElementById("scenarioAction").value.trim();
+  if (!action) { showToast("⚠ Please enter your action."); return; }
+  
+  const loader = document.getElementById("scenarioLoader");
+  const loaderText = document.getElementById("scenarioLoaderText");
+  const feedback = document.getElementById("scenarioFeedback");
+  
+  feedback.style.display = "none";
+  loaderText.textContent = "Evaluating your decision…";
+  loader.style.display = "flex";
+  
+  try {
+    const res = await fetch(`${API}/scenario-action/`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: activeScenarioTopic, action: action })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Scenario action failed");
+    
+    loader.style.display = "none";
+    feedback.style.display = "block";
+    feedback.style.borderLeft = "3px solid var(--blue)";
+    feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+      <h4 style="color:var(--blue); margin:0;">Mission Outcome</h4>
+      <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
+    </div>
+    <div>${marked.parse(data.feedback)}</div>`;
+  } catch (err) {
+    loader.style.display = "none";
+    feedback.style.display = "block";
+    feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit action."}</em>`;
   }
 }
 </script>
