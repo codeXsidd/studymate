@@ -137,3 +137,41 @@ If their rebuttal is weak, incorrect, or misses the point, push back slightly, e
 Output your response as if you are the AI Debater reacting to them. Format using markdown.
 """
     return generate_response(prompt)
+
+
+def generate_scenario(topic: str, context: str = "") -> str:
+    """Generate a real-world roleplay scenario testing the user's practical understanding of the topic."""
+    prompt = f"""
+You are creating an interactive, real-world educational roleplay. The student is learning about: "{topic}".
+Place the student in an interesting, high-stakes real-world scenario (e.g., an ER doctor, a spaceship engineer, a political advisor, a wildlife biologist) where they MUST apply concepts from the text to succeed.
+
+Context from course material:
+{context[:3000]}
+
+Rules:
+1. Describe the scenario vividly in 2-3 short paragraphs.
+2. End with a specific, urgent question or dilemma requiring them to make a decision based on the course material.
+3. Keep the tone immersive and urgent! Speak directly to the student ("You are...", "Your team needs...").
+"""
+    return generate_response(prompt)
+
+
+def evaluate_scenario_action(topic: str, user_action: str, context: str = "") -> str:
+    """Evaluate if the user's action in the scenario successfully applies the course material."""
+    prompt = f"""
+The student is in a real-world roleplay scenario about: "{topic}".
+They were presented with a dilemma.
+
+Student's chosen action:
+"{user_action}"
+
+Context from course material:
+{context[:3000]}
+
+Evaluate their action based on the context:
+1. Did they correctly apply the concepts from the material to solve the problem?
+2. If yes, describe the successful outcome of their action in the narrative.
+3. If no, describe the negative consequences of their action, and hint at the correct concept they missed.
+4. Keep your response in-character as the narrator of the scenario.
+"""
+    return generate_response(prompt)

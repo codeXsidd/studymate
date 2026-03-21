@@ -12,7 +12,9 @@ from app.ai_engine import (
     evaluate_explanation,
     generate_mindmap,
     generate_debate_stance,
-    evaluate_debate_rebuttal
+    evaluate_debate_rebuttal,
+    generate_scenario,
+    evaluate_scenario_action
 )
 from app.pdf_processor import extract_text_from_pdf
 
@@ -324,3 +326,43 @@ async def debate_rebuttal(data: DebateRebuttalRequest):
     except Exception as e:
         print("DEBATE REBUTTAL ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Debate rebuttal failed.")
+
+# ───────── SCENARIO SIMULATOR ─────────
+class ScenarioStartRequest(BaseModel):
+    topic: str
+
+@app.post("/scenario-start/")
+async def scenario_start(data: ScenarioStartRequest):
+    try:
+        if not data.topic.strip():
+            raise HTTPException(status_code=400, detail="Topic cannot be empty.")
+
+        context_text = get_stored_text()
+        context = context_text if context_text else ""
+        scenario = generate_scenario(data.topic, context)
+
+        return {"scenario": scenario}
+
+    except Exception as e:
+        print("SCENARIO START ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Scenario start failed.")
+
+class ScenarioActionRequest(BaseModel):
+    topic: str
+    action: str
+
+@app.post("/scenario-action/")
+async def scenario_action(data: ScenarioActionRequest):
+    try:
+        if not data.topic.strip() or not data.action.strip():
+            raise HTTPException(status_code=400, detail="Topic and action cannot be empty.")
+
+        context_text = get_stored_text()
+        context = context_text if context_text else ""
+        feedback = evaluate_scenario_action(data.topic, data.action, context)
+
+        return {"feedback": feedback}
+
+    except Exception as e:
+        print("SCENARIO ACTION ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Scenario action failed.")
