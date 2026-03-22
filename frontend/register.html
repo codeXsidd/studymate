@@ -124,6 +124,11 @@ body::before{
     const SUPABASE_KEY = "sb_publishable_8HPX2g6KtzLEI_qrrWLRUg_uYMYKohw"; 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // Redirect if already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.href = "/";
+    });
+
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
