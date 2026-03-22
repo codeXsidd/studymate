@@ -28,21 +28,37 @@ For visual learners, reading endless text can be tiring.
 
 ## ⚙️ How to Run Locally
 
-1. Install Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Make sure you have your Groq API key set up (or update `app/config.py`).
-3. Start the FastAPI server:
-   ```bash
-   python -m uvicorn app.server:app --reload
-   ```
-4. Open the interface in your browser:
-   ```text
-   http://127.0.0.1:8000
-   ```
+### 1. Backend Setup (FastAPI & AI/Database layer)
+```bash
+cd backend
+pip install -r requirements.txt
+```
+Copy `.env.example` to `.env` and fill in your keys:
+- **Groq API Key**: For AI quiz and explanation generation.
+- **Supabase URL & Key**: For storing processed documents and quizzes. 
+
+Start the Python backend server:
+```bash
+uvicorn app.server:app --reload
+```
+*The API will be available at `http://localhost:8000`.*
+
+### 2. Frontend Setup (Vanilla HTML/JS)
+```bash
+cd frontend
+# No installation needed! Just launch a local server:
+npx serve .
+# Or open index.html directly.
+```
+*Make sure you configure `const API = "http://localhost:8000"` inside `index.html` to connect locally, or point it to your deployed Render URL.*
+
+## 🚀 Deployment
+This project is configured as a decoupled monorepo, ideal for free-tier deployments:
+- **Frontend**: Deploy the `frontend/` folder directly to **Vercel** (with `vercel.json` included for clean URLs!).
+- **Backend**: Deploy the `backend/` folder to **Render**, establishing `uvicorn app.server:app --host 0.0.0.0 --port $PORT` as the Start Command.
 
 ## 🛠️ Built With
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3, Mermaid.js
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript, Mermaid.js
 - **Backend**: Python, FastAPI
 - **AI Processing**: Groq LLM API (`llama-3.3-70b-versatile`)
+- **Database & Auth**: Supabase PostgreSQL + Auth JS SDK
