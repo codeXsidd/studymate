@@ -17,6 +17,7 @@ from app.ai_engine import (
     evaluate_scenario_action
 )
 from app.pdf_processor import extract_text_from_pdf
+from app.config import supabase
 
 app = FastAPI(title="StudyMate API", version="2.1")
 
@@ -167,6 +168,17 @@ async def upload_pdf(file: UploadFile = File(...)):
 
         stored_topics = topics[:8]
 
+        # Save to Supabase DB if configured
+        if supabase:
+            try:
+                supabase.table("documents").insert({
+                    "filename": file.filename,
+                    "content": text,
+                    "topics": stored_topics
+                }).execute()
+            except Exception as db_err:
+                print("DB Warning (documents):", db_err)
+
         return {"detected_topics": stored_topics}
 
     except Exception as e:
@@ -194,6 +206,17 @@ async def quiz(data: QuizRequest):
 
         if not valid:
             raise HTTPException(status_code=500, detail="Invalid quiz format.")
+
+        # Save to Supabase DB if configured
+        if supabase:
+            try:
+                supabase.table("quizzes").insert({
+                    "topic": data.topic,
+                    "difficulty": data.difficulty,
+                    "quiz_data": valid
+                }).execute()
+            except Exception as db_err:
+                print("DB Warning (quizzes):", db_err)
 
         return {"quiz": valid}
 
