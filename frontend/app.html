@@ -1844,6 +1844,93 @@ async function submitDebateRebuttal() {
   }
 }
 
+// ═════════════════════════════════════════
+//  SCENARIO SIMULATOR
+// ═════════════════════════════════════════
+function renderScenarioTopics() {
+  const container = document.getElementById("scenarioTopicsList");
+  if (state.topics.length === 0) return;
+  
+  container.innerHTML = state.topics.map(t => 
+    `<button class="topic-chip" onclick="startScenario('${t}')"><span>🌍</span> ${t}</button>`
+  ).join("");
+}
+
+let activeScenarioTopic = "";
+
+async function startScenario(topic) {
+  activeScenarioTopic = topic;
+  const arena = document.getElementById("scenarioArena");
+  const scenarioText = document.getElementById("scenarioText");
+  const loader = document.getElementById("scenarioLoader");
+  const loaderText = document.getElementById("scenarioLoaderText");
+  const feedback = document.getElementById("scenarioFeedback");
+  const topicChips = document.getElementById("scenarioTopicsList").querySelectorAll(".topic-chip");
+  
+  topicChips.forEach(chip => {
+    chip.style.opacity = chip.textContent.includes(topic) ? "1" : "0.5";
+    chip.style.borderColor = chip.textContent.includes(topic) ? "var(--green)" : "var(--border)";
+  });
+  
+  arena.style.display = "block";
+  scenarioText.innerHTML = "";
+  feedback.style.display = "none";
+  document.getElementById("scenarioAction").value = "";
+  
+  loaderText.textContent = "Generating a real-world scenario…";
+  loader.style.display = "flex";
+  
+  try {
+    const res = await fetch(`${API}/scenario-start/`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: topic })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Scenario start failed");
+    
+    loader.style.display = "none";
+    scenarioText.innerHTML = marked.parse(data.scenario);
+  } catch (err) {
+    loader.style.display = "none";
+    scenarioText.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to start scenario."}</em>`;
+  }
+}
+
+async function submitScenarioAction() {
+  const action = document.getElementById("scenarioAction").value.trim();
+  if (!action) { showToast("⚠ Please enter your action/decision."); return; }
+  
+  const loader = document.getElementById("scenarioLoader");
+  const loaderText = document.getElementById("scenarioLoaderText");
+  const feedback = document.getElementById("scenarioFeedback");
+  
+  feedback.style.display = "none";
+  loaderText.textContent = "Analyzing the consequences of your action…";
+  loader.style.display = "flex";
+  
+  try {
+    const res = await fetch(`${API}/scenario-action/`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic: activeScenarioTopic, action: action })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Scenario action failed");
+    
+    loader.style.display = "none";
+    feedback.style.display = "block";
+    feedback.style.borderLeft = "3px solid var(--blue)";
+    feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+      <h4 style="color:var(--blue); margin:0;">Outcome & Feedback</h4>
+      <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
+    </div>
+    <div>${marked.parse(data.feedback)}</div>`;
+  } catch (err) {
+    loader.style.display = "none";
+    feedback.style.display = "block";
+    feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit action."}</em>`;
+  }
+}
+
 </script>
 <script>
 const API_URL = "https://studymate-f2bw.onrender.com";
