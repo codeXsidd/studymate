@@ -23,33 +23,7 @@ app = FastAPI(title="StudyMate API", version="2.1")
 
 app.mount("/static", StaticFiles(directory=".", html=True), name="static")
 
-@app.get("/sitemap.xml")
-async def sitemap():
-    return FileResponse("sitemap.xml", media_type="application/xml")
-
-@app.get("/robots.txt")
-async def robots():
-    return FileResponse("robots.txt", media_type="text/plain")
-
-@app.get("/about")
-def about():
-    return FileResponse("about.html")
-
-@app.get("/features")
-def features():
-    return FileResponse("features.html")
-
-@app.get("/how-it-works")
-def how_it_works():
-    return FileResponse("how-it-works.html")
-
-@app.get("/login")
-def login_page():
-    return FileResponse("login.html")
-
-@app.get("/register")
-def register_page():
-    return FileResponse("register.html")
+app.mount("/static", StaticFiles(directory=".", html=True), name="static")
 
 # ✅ CORS (IMPORTANT FOR MOBILE + RENDER)
 app.add_middleware(
