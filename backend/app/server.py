@@ -139,7 +139,8 @@ async def login(data: AuthRequest):
             "email": data.email,
             "password": data.password
         })
-        return {"message": "Login successful", "session": res.session.access_token if res.session else None}
+        user_name = res.user.user_metadata.get("full_name") if res.user and res.user.user_metadata else ""
+        return {"message": "Login successful", "session": res.session.access_token if res.session else None, "name": user_name}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
