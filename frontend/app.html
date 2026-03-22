@@ -1803,17 +1803,13 @@ async function submitDebateRebuttal() {
 }
 
 </script>
-<!-- ✅ SUPABASE FIRST -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://jezufeewyngcrmoepnwg.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8HPX2g6KtzLEI_qrrWLRUg_uYMYKohw";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const API_URL = "https://studymate-f2bw.onrender.com";
 
 // AUTH GUARD
-async function checkAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
+function checkAuth() {
+  const token = localStorage.getItem("sm_auth_token");
+  if (!token) {
     window.location.href = "index.html"; // Redirect to login
   } else {
     document.getElementById('logoutBtn').style.display = 'block';
@@ -1821,14 +1817,9 @@ async function checkAuth() {
 }
 checkAuth();
 
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT') {
-    window.location.href = "index.html";
-  }
-});
-
-async function logoutUser() {
-  await supabase.auth.signOut();
+function logoutUser() {
+  localStorage.removeItem("sm_auth_token");
+  window.location.href = "index.html";
 }
 </script>
 
