@@ -110,6 +110,41 @@ def get_stored_text() -> str:
     return ""
 
 
+# ───────── AUTHENTICATION (SUPABASE VIA RENDER API) ─────────
+class AuthRequest(BaseModel):
+    email: str
+    password: str
+    name: str = ""
+
+@app.post("/register")
+async def register(data: AuthRequest):
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase not configured on server")
+    try:
+        res = supabase.auth.sign_up({
+            "email": data.email,
+            "password": data.password,
+            "options": {"data": {"full_name": data.name}}
+        })
+        return {"message": "Registration successful", "user": res.user.id if res.user else None}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/login")
+async def login(data: AuthRequest):
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase not configured on server")
+    try:
+        res = supabase.auth.sign_in_with_password({
+            "email": data.email,
+            "password": data.password
+        })
+        return {"message": "Login successful", "session": res.session.access_token if res.session else None}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+
 # 🔥 FIXED UPLOAD (IMPORTANT)
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):

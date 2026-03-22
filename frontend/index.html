@@ -114,16 +114,13 @@ body::before{
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = "https://jezufeewyngcrmoepnwg.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_8HPX2g6KtzLEI_qrrWLRUg_uYMYKohw"; 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const API_URL = "https://studymate-f2bw.onrender.com";
 
-    // Redirect if already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) window.location.href = "app.html";
-    });
+    // Redirect if already logged in via token
+    if (localStorage.getItem("sm_auth_token")) {
+      window.location.href = "app.html";
+    }
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -139,20 +136,29 @@ body::before{
       errorMsg.style.display = 'none';
       successMsg.style.display = 'none';
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
+      try {
+        const res = await fetch(`${API_URL}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
 
-      if (error) {
-        errorMsg.innerText = error.message;
-        errorMsg.style.display = 'block';
-        btn.disabled = false;
-        btn.innerText = "Log In";
-      } else {
+        if (!res.ok) {
+          throw new Error(data.detail || "Invalid login credentials");
+        }
+
+        // Store session token and redirect to inside page
+        localStorage.setItem("sm_auth_token", data.session);
         successMsg.style.display = 'block';
         btn.innerText = "Redirecting...";
         setTimeout(() => { window.location.href = "app.html"; }, 1500);
+
+      } catch (err) {
+        errorMsg.innerText = err.message;
+        errorMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.innerText = "Log In";
       }
     });
   </script>
