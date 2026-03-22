@@ -684,36 +684,20 @@ main.wide {
 <!-- NAV -->
 <nav>
 
-  <div style="
-  position: fixed;
-  top: 80px;
-  right: 30px;
-  background: #111827;
-  padding: 20px;
-  border-radius: 12px;
-  width: 260px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.4);
-">
-
-  <h3 style="color:white; margin-bottom:10px;">Login</h3>
-
-  <input type="email" id="email" placeholder="Email"
-    style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:none;">
-
-  <input type="password" id="password" placeholder="Password"
-    style="width:100%; padding:10px; margin-bottom:15px; border-radius:6px; border:none;">
-
-  <button onclick="signUpUser()"
-    style="width:100%; padding:10px; margin-bottom:8px; background:#22c55e; border:none; border-radius:6px; color:white;">
-    Sign Up
-  </button>
-
-  <button onclick="loginUser()"
-    style="width:100%; padding:10px; background:#3b82f6; border:none; border-radius:6px; color:white;">
-    Login
-  </button>
-
-</div>
+  <div class="logo">Study<span>Mate</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
+    <button class="nav-tab" onclick="showPage('mindmap')">🧠 Mind Map</button>
+    <button class="nav-tab" onclick="showPage('feynman')">🎓 Feynman</button>
+    <button class="nav-tab" onclick="showPage('debate')">🤺 Debate AI</button>
+    <button class="nav-tab" onclick="showPage('tutor')">🤖 Tutor</button>
+    <button class="nav-tab" onclick="showPage('scenario')">🌍 Scenario</button>
+    <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
+  </div>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <button onclick="logoutUser()" id="logoutBtn" class="btn btn-outline" style="padding: 6px 14px; font-size:0.82rem; display:none;">Logout</button>
+  </div>
 </nav>
 
 
@@ -1821,57 +1805,30 @@ async function submitDebateRebuttal() {
 </script>
 <!-- ✅ SUPABASE FIRST -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- ✅ THEN YOUR SCRIPT -->
 <script>
-const SUPABASE_URL = "https://jezufeewyngcrnoepnwg.supabase.co";
-const SUPABASE_KEY = "YOUR_PUBLISHABLE_KEY";
-
+const SUPABASE_URL = "https://jezufeewyngcrmoepnwg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_8HPX2g6KtzLEI_qrrWLRUg_uYMYKohw";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// SIGNUP
-async function signUpUser() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if (!email || !password) {
-    alert("Enter email & password");
-    return;
-  }
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    alert(error.message);
+// AUTH GUARD
+async function checkAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    window.location.href = "login.html"; // Ensure they redirect to separate login
   } else {
-    alert("Signup successful! Check your email 📩");
+    document.getElementById('logoutBtn').style.display = 'block';
   }
 }
+checkAuth();
 
-// LOGIN
-async function loginUser() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if (!email || !password) {
-    alert("Enter email & password");
-    return;
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_OUT') {
+    window.location.href = "login.html";
   }
+});
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    alert(error.message);
-  } else {
-    alert("Login successful 🚀");
-    console.log(data);
-  }
+async function logoutUser() {
+  await supabase.auth.signOut();
 }
 </script>
 
