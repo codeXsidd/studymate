@@ -42,6 +42,14 @@ def features():
 def how_it_works():
     return FileResponse("how-it-works.html")
 
+@app.get("/login")
+def login_page():
+    return FileResponse("login.html")
+
+@app.get("/register")
+def register_page():
+    return FileResponse("register.html")
+
 # ✅ CORS (IMPORTANT FOR MOBILE + RENDER)
 app.add_middleware(
     CORSMiddleware,

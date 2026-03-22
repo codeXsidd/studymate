@@ -693,7 +693,11 @@ main.wide {
     <button class="nav-tab" onclick="showPage('scenario')">🌍 Scenario</button>
     <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
   </div>
-  <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    <a href="/login" class="nav-tab" style="text-decoration:none; padding: 6px 14px;">Login</a>
+    <a href="/register" class="btn btn-primary" style="text-decoration:none; padding: 6px 14px; font-size:0.82rem;">Sign Up</a>
+  </div>
 </nav>
 
 
