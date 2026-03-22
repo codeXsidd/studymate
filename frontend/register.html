@@ -126,7 +126,7 @@ body::before{
 
     // Redirect if already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) window.location.href = "/";
+      if (session) window.location.href = "app.html";
     });
 
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -158,7 +158,7 @@ body::before{
       } else {
         successMsg.style.display = 'block';
         btn.innerText = "Redirecting...";
-        setTimeout(() => { window.location.href = "/login"; }, 2000);
+        setTimeout(() => { window.location.href = "index.html"; }, 2000);
       }
     });
   </script>
