@@ -150,6 +150,8 @@ body::before{
 
         // Store session token and redirect to inside page
         localStorage.setItem("sm_auth_token", data.session);
+        if (data.name) localStorage.setItem("sm_user_name", data.name);
+        
         successMsg.style.display = 'block';
         btn.innerText = "Redirecting...";
         setTimeout(() => { window.location.href = "app.html"; }, 1500);
