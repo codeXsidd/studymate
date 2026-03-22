@@ -8,7 +8,7 @@
 <meta name="description" content="StudyMate AI helps students generate quizzes, summaries, and mind maps using AI.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
@@ -17,24 +17,24 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg:#0e1117;
-  --surface:rgba(22,27,39,0.78);
-  --surface2:rgba(29,37,53,0.78);
-  --border:#252d3f;
-  --green:#3bdc8c;
-  --green-dim:#2ab872;
-  --amber:#f5c842;
-  --red:#f25c5c;
-  --blue:#5b9af5;
-  --text:#e8edf5;
-  --muted:#7a8599;
-  --radius:14px;
-  --shadow:0 8px 32px rgba(0,0,0,.45);
+  --bg:#09090b;
+  --surface:rgba(24, 24, 27, 0.65);
+  --surface2:rgba(39, 39, 42, 0.6);
+  --border:rgba(255,255,255,0.08);
+  --green:#10b981;
+  --green-dim:#059669;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --blue:#3b82f6;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --radius:16px;
+  --shadow:0 12px 32px rgba(0,0,0,.45);
 }
 
 body{
   
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter', sans-serif;
   background-color:var(--bg);
   background-image: 
     radial-gradient(circle at 15% 50%, rgba(59,220,140,0.06), transparent 30%),
@@ -90,16 +90,16 @@ nav{
   position:sticky;top:0;z-index:100;
 }
 .logo{
-  font-family:'Syne',sans-serif;
-  font-weight:800;font-size:1.3rem;
+  font-family:'Outfit', sans-serif;
+  font-weight:800;font-size:1.4rem;
   color:var(--green);
   letter-spacing:-0.5px;
 }
 .logo span{color:var(--text)}
 .nav-tabs{display:flex;gap:4px}
 .nav-tab{
-  font-family:'DM Sans',sans-serif;
-  font-size:.82rem;font-weight:500;
+  font-family:'Inter', sans-serif;
+  font-size:.85rem;font-weight:500;
   padding:7px 16px;
   border:1px solid transparent;
   border-radius:8px;
@@ -154,9 +154,10 @@ main.wide {
   animation:pulseGlow 2s infinite;
 }
 .hero h1{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(2rem,5vw,3.2rem);
+  font-family:'Outfit', sans-serif;
+  font-size:clamp(2.5rem,5vw,3.8rem);
   font-weight:800;
+  letter-spacing: -1px;
   line-height:1.1;
   margin-bottom:16px;
 }
@@ -188,10 +189,11 @@ main.wide {
   transform: translateY(-2px);
 } 
 .card-title{
-  font-family:'Syne',sans-serif;
-  font-size:1rem;font-weight:700;
+  font-family:'Outfit', sans-serif;
+  font-size:1.15rem;font-weight:700;
   margin-bottom:18px;
   display:flex;align-items:center;gap:8px;
+  letter-spacing:-0.3px;
 }
 .card-title .icon{font-size:1.1rem}
 
@@ -239,22 +241,22 @@ main.wide {
 
 /* ───────── BUTTONS ───────── */
 .btn{
-  font-family:'DM Sans',sans-serif;
-  font-size:.88rem;font-weight:500;
-  padding:10px 20px;
-  border:none;border-radius:9px;
+  font-family:'Outfit', sans-serif;
+  font-size:.95rem;font-weight:600;
+  padding:12px 20px;
+  border:none;border-radius:10px;
   cursor:pointer;
-  transition:all .18s;
+  transition:all .2s ease;
   display:inline-flex;align-items:center;gap:7px;
 }
 .btn-primary{
-  background:var(--green);color:#0e1117;
-  box-shadow: 0 0 16px rgba(59,220,140,0.25);
+  background:linear-gradient(135deg, var(--green), #059669); color:#fff;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
 }
 .btn-primary:hover{
-  background:var(--green-dim);
   transform:translateY(-2px);
-  box-shadow: 0 0 24px rgba(59,220,140,0.45);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+  filter: brightness(1.1);
 }
 .btn-secondary{
   background:var(--surface2);color:var(--text);
@@ -676,6 +678,23 @@ main.wide {
   max-width: none !important;
   height: auto !important;
 }
+
+/* ───────── MOBILE RESPONSIVENESS ───────── */
+@media (max-width: 768px) {
+  nav { flex-direction: column; padding: 12px 16px; gap: 14px; position:relative; }
+  .logo { justify-content:center; }
+  .nav-tabs { width: 100%; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
+  .nav-tab { font-size: 0.82rem; padding: 6px 12px; }
+  .nav-tabs::-webkit-scrollbar { height: 4px; }
+  .nav-tabs::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; }
+  main { padding: 24px 16px 60px; max-width: 100vw; }
+  .hero h1 { font-size: 2.2rem; }
+  .hero { padding: 24px 0 36px; }
+  .card { padding: 16px; }
+  .card-title { font-size: 1rem; }
+  .btn { width: 100%; justify-content: center; }
+  .top-right-nav { position:absolute; right:16px; top:12px; }
+}
 </style>
 
 </head>
@@ -694,7 +713,7 @@ main.wide {
     <button class="nav-tab" onclick="showPage('scenario')">🌍 Scenario</button>
     <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
   </div>
-  <div style="display:flex; gap:12px; align-items:center;">
+  <div class="top-right-nav" style="display:flex; gap:12px; align-items:center;">
     <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
     <button onclick="logoutUser()" id="logoutBtn" class="btn btn-outline" style="padding: 6px 14px; font-size:0.82rem; display:none;">Logout</button>
   </div>
