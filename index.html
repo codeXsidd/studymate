@@ -677,6 +677,7 @@ main.wide {
   height: auto !important;
 }
 </style>
+
 </head>
 <body>
 
@@ -694,6 +695,12 @@ main.wide {
     <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
   </div>
   <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+  <div style="position:fixed; top:80px; right:20px; background:#111; padding:15px; border-radius:10px; z-index:999;">
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
+  <button onclick="signUpUser()">Sign Up</button>
+  <button onclick="loginUser()">Login</button>
+</div>
 </nav>
 
 
@@ -1031,7 +1038,7 @@ main.wide {
 // ═════════════════════════════════════════
 //  STATE
 // ═════════════════════════════════════════
-const API = "";
+const API = "http://127.0.0.1:8000";
 
 let state = {
   topics: [],
@@ -1798,92 +1805,81 @@ async function submitDebateRebuttal() {
   }
 }
 
-// ═════════════════════════════════════════
-//  SCENARIO SIMULATOR
-// ═════════════════════════════════════════
-function renderScenarioTopics() {
-  const container = document.getElementById("scenarioTopicsList");
-  if (state.topics.length === 0) return;
-  
-  container.innerHTML = state.topics.map(t => 
-    `<button class="topic-chip" onclick="startScenario('${t}')"><span>🌍</span> ${t}</button>`
-  ).join("");
-}
-
-let activeScenarioTopic = "";
-
-async function startScenario(topic) {
-  activeScenarioTopic = topic;
-  const arena = document.getElementById("scenarioArena");
-  const sText = document.getElementById("scenarioText");
-  const loader = document.getElementById("scenarioLoader");
-  const loaderText = document.getElementById("scenarioLoaderText");
-  const feedback = document.getElementById("scenarioFeedback");
-  const topicChips = document.getElementById("scenarioTopicsList").querySelectorAll(".topic-chip");
-  
-  topicChips.forEach(chip => {
-    chip.style.opacity = chip.textContent.includes(topic) ? "1" : "0.5";
-    chip.style.borderColor = chip.textContent.includes(topic) ? "var(--green)" : "var(--border)";
-  });
-  
-  arena.style.display = "block";
-  sText.innerHTML = "";
-  feedback.style.display = "none";
-  document.getElementById("scenarioAction").value = "";
-  
-  loaderText.textContent = "Generating real-world parameters…";
-  loader.style.display = "flex";
-  
-  try {
-    const res = await fetch(`${API}/scenario-start/`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: topic })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.detail || "Scenario start failed");
-    
-    loader.style.display = "none";
-    sText.innerHTML = marked.parse(data.scenario);
-  } catch (err) {
-    loader.style.display = "none";
-    sText.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to start scenario."}</em>`;
-  }
-}
-
-async function submitScenarioAction() {
-  const action = document.getElementById("scenarioAction").value.trim();
-  if (!action) { showToast("⚠ Please enter your action."); return; }
-  
-  const loader = document.getElementById("scenarioLoader");
-  const loaderText = document.getElementById("scenarioLoaderText");
-  const feedback = document.getElementById("scenarioFeedback");
-  
-  feedback.style.display = "none";
-  loaderText.textContent = "Evaluating your decision…";
-  loader.style.display = "flex";
-  
-  try {
-    const res = await fetch(`${API}/scenario-action/`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: activeScenarioTopic, action: action })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.detail || "Scenario action failed");
-    
-    loader.style.display = "none";
-    feedback.style.display = "block";
-    feedback.style.borderLeft = "3px solid var(--blue)";
-    feedback.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-      <h4 style="color:var(--blue); margin:0;">Mission Outcome</h4>
-      <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="speakText(this.parentElement.nextElementSibling.innerText)">🔊 Read</button>
-    </div>
-    <div>${marked.parse(data.feedback)}</div>`;
-  } catch (err) {
-    loader.style.display = "none";
-    feedback.style.display = "block";
-    feedback.innerHTML = `<em style='color:var(--red)'>❌ ${err.message || "Failed to submit action."}</em>`;
-  }
-}
 </script>
+<!-- ✅ SUPABASE LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ==========================
+// 🔐 SUPABASE CONFIG
+// ==========================
+const SUPABASE_URL = "https://jezufeewyngcrnoepnwg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_0HPX2g6KtzLEI_qrrWLRUg_uYMYKohW";
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ==========================
+// 🔐 SIGN UP
+// ==========================
+async function signUpUser() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Enter email & password");
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Signup successful! Check email 📩");
+    console.log(data);
+  }
+}
+
+// ==========================
+// 🔐 LOGIN
+// ==========================
+async function loginUser() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Enter email & password");
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Login successful 🚀");
+    console.log(data);
+  }
+}
+
+// ==========================
+// 🔐 SESSION CHECK
+// ==========================
+async function checkUser() {
+  const { data } = await supabase.auth.getUser();
+  if (data.user) {
+    console.log("User already logged in:", data.user.email);
+  }
+}
+
+checkUser();
+</script>
+
 </body>
 </html>
