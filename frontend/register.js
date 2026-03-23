@@ -34,7 +34,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
     successMsg.style.display = 'block';
     btn.innerText = "Redirecting...";
-    setTimeout(() => { window.location.href = "index.html"; }, 1500);
+    window.location.href = "index.html";
 
   } catch (err) {
     errorMsg.innerText = err.message;
