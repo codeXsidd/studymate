@@ -6,56 +6,7 @@
   <title>About | StudyMate AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#0e1117; --surface:rgba(22,27,39,0.78); --surface2:rgba(29,37,53,0.78);
-      --border:#252d3f; --green:#3bdc8c; --text:#e8edf5; --muted:#7a8599; --radius:14px;
-    }
-    body{
-      font-family:'DM Sans',sans-serif; background-color:var(--bg);
-      background-image: radial-gradient(circle at 15% 50%, rgba(59,220,140,0.06), transparent 30%), radial-gradient(circle at 85% 30%, rgba(91,154,245,0.06), transparent 30%);
-      color:var(--text); min-height:100vh; overflow-x:hidden;
-    }
-    nav{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:18px 40px; background:rgba(14,17,23,.85); backdrop-filter:blur(12px);
-      border-bottom:1px solid var(--border); position:sticky;top:0;z-index:100;
-    }
-    .logo{
-      font-family:'Syne',sans-serif; font-weight:800;font-size:1.3rem;
-      color:var(--green); letter-spacing:-0.5px; text-decoration:none;
-    }
-    .logo span{color:var(--text)}
-    .nav-tabs{display:flex;gap:4px}
-    .nav-tab{
-      font-family:'DM Sans',sans-serif; font-size:.82rem;font-weight:500;
-      padding:7px 16px; border:1px solid transparent; border-radius:8px;
-      cursor:pointer; color:var(--muted); background:none; transition:all .2s;
-      text-decoration:none;
-    }
-    .nav-tab:hover{color:var(--text);border-color:var(--border)}
-    .nav-tab.active{
-        color:var(--green);
-        background:rgba(59,220,140,.08);
-        border-color:rgba(59,220,140,.2);
-    }
-    main{ max-width:860px; margin:0 auto; padding:60px 24px 80px; }
-    h1 { font-family:'Syne',sans-serif; font-size:2.4rem; margin-bottom: 24px; text-align: center; }
-    .card {
-      background:var(--surface); backdrop-filter: blur(12px); border:1px solid var(--border);
-      border-radius:var(--radius); padding:32px; margin-bottom:20px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-    }
-    .card h2, .card h3 { font-family:'Syne',sans-serif; font-size:1.4rem; color:var(--green); margin-bottom: 16px; }
-    .card p, .card ul { color: var(--muted); line-height: 1.7; margin-bottom: 16px; font-size: 1.05rem; }
-    .card ul { padding-left: 20px; }
-    .card li { margin-bottom: 8px; }
-    @media(max-width:800px){
-      nav{flex-wrap:wrap; justify-content:center; gap:12px; padding:14px 18px}
-      .nav-tabs{flex-wrap:wrap; justify-content:center; width:100%; order:3}
-    }
-  </style>
+  <link rel="stylesheet" href="about.css">
 </head>
 <body>
 <nav>
