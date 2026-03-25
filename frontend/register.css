@@ -20,6 +20,10 @@ body{
   display:flex; flex-direction:column;
   overflow: hidden;
 }
+h1 {
+  position: absolute;
+  left: -9999px;
+}
 
 /* ───────── ANIMATED BACKGROUND ORBS ───────── */
 .orb {

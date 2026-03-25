@@ -9,6 +9,10 @@
       background-image: radial-gradient(circle at 15% 50%, rgba(59,220,140,0.06), transparent 30%), radial-gradient(circle at 85% 30%, rgba(91,154,245,0.06), transparent 30%);
       color:var(--text); min-height:100vh; overflow-x:hidden;
     }
+    h1 {
+  position: absolute;
+  left: -9999px;
+}
     nav{
       display:flex;align-items:center;justify-content:space-between;
       padding:18px 40px; background:rgba(14,17,23,.85); backdrop-filter:blur(12px);
