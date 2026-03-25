@@ -12,6 +12,10 @@
   --muted:#94a3b8;
   --radius:20px;
 }
+h1 {
+  position: absolute;
+  left: -9999px;
+}
 body{
   font-family:'Inter', sans-serif; 
   background-color:var(--bg); 
