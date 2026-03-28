@@ -1,8 +1,3 @@
-
-// ═════════════════════════════════════════
-//  STATE
-// ═════════════════════════════════════════
-
 // ═════════════════════════════════════════
 //  STATE
 // ═════════════════════════════════════════
@@ -863,7 +858,6 @@ async function submitScenarioAction() {
 
 
 
-const API_URL = "https://studymate-f2bw.onrender.com";
 
 // AUTH GUARD
 function checkAuth() {
