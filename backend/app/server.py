@@ -23,7 +23,6 @@ app = FastAPI(title="StudyMate API", version="2.1")
 
 app.mount("/static", StaticFiles(directory=".", html=True), name="static")
 
-app.mount("/static", StaticFiles(directory=".", html=True), name="static")
 
 # ✅ CORS (IMPORTANT FOR MOBILE + RENDER)
 app.add_middleware(
