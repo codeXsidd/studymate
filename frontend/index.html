@@ -44,9 +44,14 @@
           <label>Email Address</label>
           <input type="email" id="email" class="form-control" placeholder="example@domain.com" required>
         </div>
-        <div class="form-group">
+        <div class="form-group password-group">
           <label>Password</label>
-          <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+          <div class="input-wrapper">
+            <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+            <button type="button" class="password-toggle" id="togglePassword">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary" id="submitBtn">Log In</button>
         <p id="errorMsg" style="color:var(--red); font-size:0.85rem; margin-top:10px; display:none;"></p>
