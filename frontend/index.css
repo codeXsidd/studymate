@@ -293,6 +293,37 @@ nav {
   text-decoration: underline;
 }
 
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.password-toggle:hover {
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.form-control {
+  padding-right: 48px; /* Room for toggle button */
+}
+
 /* ───────── MESSAGES ───────── */
 #errorMsg, #successMsg {
   padding: 12px;
