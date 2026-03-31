@@ -14,7 +14,8 @@ from app.ai_engine import (
     generate_debate_stance,
     evaluate_debate_rebuttal,
     generate_scenario,
-    evaluate_scenario_action
+    evaluate_scenario_action,
+    generate_flashcards
 )
 from app.pdf_processor import extract_text_from_pdf
 from app.config import supabase
@@ -406,3 +407,34 @@ async def scenario_action(data: ScenarioActionRequest):
     except Exception as e:
         print("SCENARIO ACTION ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Scenario action failed.")
+
+
+# ───────── FLASHCARD FORGE ─────────
+class FlashcardRequest(BaseModel):
+    topic: str
+
+
+@app.post("/flashcards/")
+async def flashcards(data: FlashcardRequest):
+    try:
+        if not data.topic.strip():
+            raise HTTPException(status_code=400, detail="Topic cannot be empty.")
+
+        context_text = get_stored_text()
+        context = context_text if context_text else ""
+        raw = generate_flashcards(data.topic, context)
+        cards = extract_json_array(raw)
+
+        valid = []
+        for c in cards:
+            if isinstance(c, dict) and "front" in c and "back" in c:
+                valid.append(c)
+
+        if not valid:
+            raise HTTPException(status_code=500, detail="Invalid flashcard format.")
+
+        return {"flashcards": valid}
+
+    except Exception as e:
+        print("FLASHCARDS ERROR:", str(e))
+        raise HTTPException(status_code=500, detail="Flashcards generation failed.")
