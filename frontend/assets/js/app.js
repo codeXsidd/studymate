@@ -43,6 +43,11 @@ function showPage(id) {
   } else {
     mainEl.classList.remove("wide");
   }
+
+  // Close sidebar on mobile
+  if (window.innerWidth <= 992) {
+    document.querySelector(".sidebar").classList.remove("show");
+  }
 }
 
 // ═════════════════════════════════════════
