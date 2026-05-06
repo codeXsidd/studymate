@@ -23,31 +23,41 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
-<link rel="stylesheet" href="app.css">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <h1>StudyMate Dashboard – AI Study Assistant</h1>
 
-<!-- NAV -->
-<nav>
+<div class="app-container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="/app" class="logo">Study<span>Mate</span></a>
+    
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
+      <button class="nav-tab" onclick="showPage('mindmap')">🧠 Mind Map</button>
+      <button class="nav-tab" onclick="showPage('feynman')">🎓 Feynman</button>
+      <button class="nav-tab" onclick="showPage('debate')">🤺 Debate AI</button>
+      <button class="nav-tab" onclick="showPage('tutor')">🤖 Tutor</button>
+      <button class="nav-tab" onclick="showPage('scenario')">🌍 Scenario</button>
+      <button class="nav-tab" onclick="showPage('flashcards')">🎴 Flashcards</button>
+      <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
+    </div>
 
-  <a href="/app" class="logo" style="text-decoration:none">Study<span>Mate</span></a>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
-    <button class="nav-tab" onclick="showPage('mindmap')">🧠 Mind Map</button>
-    <button class="nav-tab" onclick="showPage('feynman')">🎓 Feynman</button>
-    <button class="nav-tab" onclick="showPage('debate')">🤺 Debate AI</button>
-    <button class="nav-tab" onclick="showPage('tutor')">🤖 Tutor</button>
-    <button class="nav-tab" onclick="showPage('scenario')">🌍 Scenario</button>
-    <button class="nav-tab" onclick="showPage('flashcards')">🎴 Flashcards</button>
-    <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
+    <div class="sidebar-footer">
+      <div style="display:flex; gap:12px; align-items:center; justify-content:space-between; padding:0 8px;">
+        <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <button onclick="logoutUser()" id="logoutBtn" class="btn btn-outline" style="padding: 6px 14px; font-size:0.8rem; display:none;">Logout</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MOBILE TOP BAR -->
+  <div class="top-bar">
+    <a href="/app" class="logo">Study<span>Mate</span></a>
+    <button class="btn btn-outline" style="padding:8px" onclick="document.querySelector('.sidebar').classList.toggle('show')">☰</button>
   </div>
-  <div class="top-right-nav" style="display:flex; gap:12px; align-items:center;">
-    <button class="dark-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
-    <button onclick="logoutUser()" id="logoutBtn" class="btn btn-outline" style="padding: 6px 14px; font-size:0.82rem; display:none;">Logout</button>
-  </div>
-</nav>
 
 
 <!-- KNOWLEDGE CHECK MODAL -->
@@ -424,7 +434,8 @@
 <div class="toast" id="toast"></div>
 
 
-<script src="app.js"></script>
+</div> <!-- End app-container -->
+<script src="assets/js/app.js"></script>
 
 </body>
 </html>
