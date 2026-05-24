@@ -8,6 +8,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #4: Configured modern glassmorphic style additions in app.css.
 - Contribution #5: Completed verification suite and successfully tested local FastAPI endpoints.
 - Contribution #6: Implemented dynamic event handlers inside mind map rendering context.
+- Contribution #7: Fine-tuned responsive modal widths on mobile displays.
+
 
 
 
