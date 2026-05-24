@@ -12,6 +12,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #8: Refined overall layout spacing for side margins on desktop screens.
 - Contribution #9: Added detailed accessibility documentation in features.html.
 - Contribution #10: Structured sitemap metadata optimization.
+- Contribution #11: Refined viewport responsiveness in landing page views.
+
 
 
 
