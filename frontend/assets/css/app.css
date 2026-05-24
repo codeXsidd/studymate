@@ -845,3 +845,69 @@ main.wide {
   }
 }
 
+/* ───────── MIND MAP INTERACTIVE NODE STYLES ───────── */
+#mindmapContainer .node {
+  cursor: pointer !important;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s ease, stroke-width 0.25s ease !important;
+}
+
+#mindmapContainer .node:hover {
+  filter: brightness(1.2) drop-shadow(0 0 10px rgba(59, 220, 140, 0.6)) !important;
+  transform: scale(1.04) !important;
+}
+
+#mindmapContainer .node rect, 
+#mindmapContainer .node circle, 
+#mindmapContainer .node polygon,
+#mindmapContainer .node path {
+  transition: fill 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease !important;
+}
+
+#mindmapContainer .node:hover rect,
+#mindmapContainer .node:hover circle,
+#mindmapContainer .node:hover polygon,
+#mindmapContainer .node:hover path {
+  stroke: var(--green) !important;
+  stroke-width: 2px !important;
+}
+
+/* ───────── CONCEPT ACTIONS MODAL OVERLAY STYLES ───────── */
+.concept-modal-card {
+  border: 1px solid rgba(59, 220, 140, 0.2) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 220, 140, 0.1) !important;
+  background: linear-gradient(135deg, rgba(20, 24, 33, 0.95) 0%, rgba(14, 17, 23, 0.98) 100%) !important;
+  animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); filter: blur(5px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.concept-modal-card .btn {
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
+}
+
+.concept-modal-card .btn-primary {
+  border: 1px solid rgba(59, 220, 140, 0.3);
+}
+
+.concept-modal-card .btn-secondary {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.concept-modal-card .btn:hover {
+  transform: translateX(4px) !important;
+  background: rgba(59, 220, 140, 0.08) !important;
+  border-color: var(--green) !important;
+  color: var(--green) !important;
+}
+
+.concept-modal-card .btn-primary:hover {
+  background: linear-gradient(135deg, var(--green), #059669) !important;
+  color: white !important;
+  transform: translateX(4px) translateY(-1px) !important;
+}
+
