@@ -1,7 +1,9 @@
 // ═════════════════════════════════════════
 //  STATE
 // ═════════════════════════════════════════
-const API = "https://studymate-f2bw.onrender.com";
+const API = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") 
+  ? "http://localhost:8000" 
+  : "https://studymate-f2bw.onrender.com";
 
 let state = {
   topics: [],
@@ -602,6 +604,7 @@ async function generateMindmap() {
           console.error("Mermaid error:", e);
           container.innerHTML += `<div style="color:var(--amber);margin-top:10px;text-align:center;">Note: AI generated a slightly malformed graph, but we tried to render it.</div>`;
       });
+      setupMindmapNodeInteractions();
     } else {
       container.innerHTML = `<div style="color:var(--red);text-align:center;padding:20px;">Failed to generate map.</div>`;
     }
@@ -939,10 +942,75 @@ function navigateFlashcards(dir) {
   }
 }
 
+// ═════════════════════════════════════════
+//  CONCEPT MIND MAP INTERACTIONS
+// ═════════════════════════════════════════
+let currentConcept = "";
 
+function setupMindmapNodeInteractions() {
+  const nodes = document.querySelectorAll("#mindmapContainer .node");
+  if (nodes.length === 0) {
+    console.log("No nodes found to attach listeners.");
+    return;
+  }
 
+  nodes.forEach(node => {
+    node.style.cursor = "pointer";
+    
+    node.addEventListener("click", (e) => {
+      e.stopPropagation(); // Stop drag trigger
+      
+      // Extract text content from the node
+      const labelEl = node.querySelector(".nodeLabel") || node.querySelector("span") || node.querySelector("text");
+      if (labelEl) {
+        let concept = labelEl.textContent.trim();
+        // Clean surrounding special characters
+        concept = concept.replace(/^["'({[\s]+|["')}\s]+$/g, '').trim();
+        if (concept) {
+          openConceptInteractionModal(concept);
+        }
+      }
+    });
+  });
+}
 
+function openConceptInteractionModal(concept) {
+  currentConcept = concept;
+  document.getElementById("selectedConceptName").textContent = concept;
+  document.getElementById("conceptModal").classList.add("show");
+}
 
+function closeConceptModal() {
+  document.getElementById("conceptModal").classList.remove("show");
+}
+
+async function actionOnConcept(actionType) {
+  closeConceptModal();
+  
+  if (actionType === 'explain') {
+    state.selectedTopic = currentConcept;
+    showPage("tutor");
+    explainTopic();
+  } else if (actionType === 'feynman') {
+    showPage("feynman");
+    document.getElementById("feynmanTopic").value = currentConcept;
+    document.getElementById("feynmanExplanation").value = "";
+    document.getElementById("feynmanExplanation").focus();
+  } else if (actionType === 'debate') {
+    showPage("debate");
+    startDebate(currentConcept);
+  } else if (actionType === 'flashcards') {
+    showPage("flashcards");
+    startFlashcards(currentConcept);
+  } else if (actionType === 'quiz') {
+    state.selectedTopic = currentConcept;
+    state.selectedTopicIndex = null; // Concept-specific quiz
+    startQuiz();
+  } else if (actionType === 'scenario') {
+    showPage("scenario");
+    startScenario(currentConcept);
+  }
+}
 
 // AUTH GUARD
 function checkAuth() {

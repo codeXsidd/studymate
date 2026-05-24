@@ -74,6 +74,40 @@
   </div>
 </div>
 
+<!-- CONCEPT INTERACTION MODAL -->
+<div class="know-modal" id="conceptModal">
+  <div class="know-card concept-modal-card" style="max-width: 460px; text-align:center;">
+    <div style="font-size:2rem;margin-bottom:12px">🧠</div>
+    <h3 style="font-family:'Outfit',sans-serif;font-size:1.35rem;margin-bottom:6px;">Concept Actions</h3>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:20px;">What would you like to do with the concept <strong id="selectedConceptName" style="color:var(--green)"></strong>?</p>
+    
+    <div style="display:flex; flex-direction:column; gap:10px; width:100%; align-items:stretch;">
+      <button class="btn btn-primary" onclick="actionOnConcept('explain')" style="justify-content:flex-start; text-align:left; font-size:0.9rem; padding:12px 16px;">
+        📖 &nbsp; Explain with AI Tutor
+      </button>
+      <button class="btn btn-secondary" onclick="actionOnConcept('feynman')" style="justify-content:flex-start; text-align:left; font-size:0.9rem; padding:12px 16px;">
+        🎓 &nbsp; Teach the AI (Feynman)
+      </button>
+      <button class="btn btn-secondary" onclick="actionOnConcept('debate')" style="justify-content:flex-start; text-align:left; font-size:0.9rem; padding:12px 16px;">
+        🤺 &nbsp; Debate this Concept
+      </button>
+      <button class="btn btn-secondary" onclick="actionOnConcept('flashcards')" style="justify-content:flex-start; text-align:left; font-size:0.9rem; padding:12px 16px;">
+        🎴 &nbsp; Forge Flashcards
+      </button>
+      <button class="btn btn-secondary" onclick="actionOnConcept('quiz')" style="justify-content:flex-start; text-align:left; font-size:0.9rem; padding:12px 16px;">
+        📝 &nbsp; Generate 5-Question Quiz
+      </button>
+      <button class="btn btn-secondary" onclick="actionOnConcept('scenario')" style="justify-content:flex-start; text-align:left; font-size:0.9rem; padding:12px 16px;">
+        🌍 &nbsp; Start Scenario Simulator
+      </button>
+    </div>
+    
+    <div style="margin-top: 18px; display:flex; justify-content:flex-end;">
+      <button class="btn btn-outline" style="padding: 8px 16px; font-size:0.85rem;" onclick="closeConceptModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- MAIN -->
 <main>
 

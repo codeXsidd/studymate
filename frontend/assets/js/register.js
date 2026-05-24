@@ -1,4 +1,6 @@
-const API_URL = "https://studymate-f2bw.onrender.com";
+const API_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") 
+  ? "http://localhost:8000" 
+  : "https://studymate-f2bw.onrender.com";
 
 // Redirect if already logged in via token
 if (localStorage.getItem("sm_auth_token")) {
