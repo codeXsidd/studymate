@@ -18,6 +18,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #14: Refactored mobile drawer gestures for intuitive swiping.
 - Contribution #15: Cleaned up redundant dependencies from requirements.txt.
 - Contribution #16: Optimized assets folder directory layout structure.
+- Contribution #17: Refined robots.txt crawler search engine guidelines.
+
 
 
 
