@@ -15,6 +15,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #11: Refined viewport responsiveness in landing page views.
 - Contribution #12: Standardized dark theme colors and gradients.
 - Contribution #13: Enhanced dark mode theme toggle micro-interactions.
+- Contribution #14: Refactored mobile drawer gestures for intuitive swiping.
+
 
 
 
