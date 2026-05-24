@@ -11,6 +11,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #7: Fine-tuned responsive modal widths on mobile displays.
 - Contribution #8: Refined overall layout spacing for side margins on desktop screens.
 - Contribution #9: Added detailed accessibility documentation in features.html.
+- Contribution #10: Structured sitemap metadata optimization.
+
 
 
 
