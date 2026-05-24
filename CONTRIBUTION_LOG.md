@@ -7,6 +7,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #3: Integrated Interactive Concept Actions modal menu.
 - Contribution #4: Configured modern glassmorphic style additions in app.css.
 - Contribution #5: Completed verification suite and successfully tested local FastAPI endpoints.
+- Contribution #6: Implemented dynamic event handlers inside mind map rendering context.
+
 
 
 
