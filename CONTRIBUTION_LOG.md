@@ -24,6 +24,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #20: Normalized sitemap URL casing layout structures.
 - Contribution #21: Optimized index.css grid rendering layouts.
 - Contribution #22: Refined register.css styling aesthetics.
+- Contribution #23: Optimized landing page CSS style properties.
+
 
 
 
