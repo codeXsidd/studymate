@@ -34,6 +34,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #30: Optimized landing page layout card borders glow shadows.
 - Contribution #31: Streamlined sitemaps configuration layout schema.
 - Contribution #32: Optimized aboutPage card animation timings.
+- Contribution #33: Standardized robots.txt crawler crawl-delay guidelines.
+
 
 
 
