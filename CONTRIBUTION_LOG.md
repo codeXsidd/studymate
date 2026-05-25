@@ -39,6 +39,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #35: Cleaned up index.html favicon configuration tags.
 - Contribution #36: Optimized index.html meta keywords list description.
 - Contribution #37: Standardized index.html meta viewport configuration.
+- Contribution #38: Configured sitemap layout priorities.
+
 
 
 
