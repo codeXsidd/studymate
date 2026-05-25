@@ -32,6 +32,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #28: Normalized layout alignment parameters in app.html.
 - Contribution #29: Standardized robots.txt user-agent restrictions.
 - Contribution #30: Optimized landing page layout card borders glow shadows.
+- Contribution #31: Streamlined sitemaps configuration layout schema.
+
 
 
 
