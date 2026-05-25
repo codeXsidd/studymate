@@ -36,6 +36,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #32: Optimized aboutPage card animation timings.
 - Contribution #33: Standardized robots.txt crawler crawl-delay guidelines.
 - Contribution #34: Standardized robots.txt search engine disallow blocks.
+- Contribution #35: Cleaned up index.html favicon configuration tags.
+
 
 
 
