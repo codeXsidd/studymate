@@ -27,6 +27,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #23: Optimized landing page CSS style properties.
 - Contribution #24: Cleaned up HTML element layout ordering.
 - Contribution #25: Added final UI polish and performance optimizations.
+- Contribution #26: Optimized sitemap dynamic priority calculations.
+
 
 
 
