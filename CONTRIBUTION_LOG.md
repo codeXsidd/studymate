@@ -30,6 +30,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #26: Optimized sitemap dynamic priority calculations.
 - Contribution #27: Optimized about.css typography sizes.
 - Contribution #28: Normalized layout alignment parameters in app.html.
+- Contribution #29: Standardized robots.txt user-agent restrictions.
+
 
 
 
