@@ -38,6 +38,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #34: Standardized robots.txt search engine disallow blocks.
 - Contribution #35: Cleaned up index.html favicon configuration tags.
 - Contribution #36: Optimized index.html meta keywords list description.
+- Contribution #37: Standardized index.html meta viewport configuration.
+
 
 
 
