@@ -43,6 +43,7 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #39: Refined aboutPage layout design structure margins.
 - Contribution #40: Optimized robots.txt crawler host variables.
 - Contribution #41: Configured sitemap layout priorities and dynamic priority metadata.
+- Contribution #42: Structured canonical URL link definitions.
 
 
 
