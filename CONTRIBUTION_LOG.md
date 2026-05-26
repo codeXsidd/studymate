@@ -44,6 +44,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #40: Optimized robots.txt crawler host variables.
 - Contribution #41: Configured sitemap layout priorities and dynamic priority metadata.
 - Contribution #42: Structured canonical URL link definitions.
+- Contribution #43: Standardized Google Fonts layout performance attributes.
+- Contribution #44: Standardized landing page footer links structure.
 
 
 
