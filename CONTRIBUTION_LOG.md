@@ -41,6 +41,8 @@ This file tracks contributions made to the StudyMate project.
 - Contribution #37: Standardized index.html meta viewport configuration.
 - Contribution #38: Configured sitemap layout priorities.
 - Contribution #39: Refined aboutPage layout design structure margins.
+- Contribution #40: Optimized robots.txt crawler host variables.
+
 
 
 
