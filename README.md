@@ -65,3 +65,14 @@ This project is configured as a decoupled monorepo, ideal for free-tier deployme
 
 ## 👥 Co-Authors
 - Automated workflow tests and integrations are co-authored with GitHub Actions Bot.
+## Environment Variables
+
+Create a `.env` file inside the backend directory and configure the following variables:
+
+```
+GROQ_API_KEY=your_groq_api_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_anon_key
+```
+
+These environment variables are required for AI processing and user authentication.
