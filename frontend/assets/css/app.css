@@ -80,69 +80,97 @@ body::before{
 /* ───────── TOP NAV BAR ───────── */
 .topnav {
   width: 100%;
-  background: rgba(9, 9, 11, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
+  background: rgba(9, 9, 11, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 20px;
-  padding: 0 28px;
+  padding: 0 24px;
   position: sticky;
   top: 0;
   z-index: 100;
-  height: 62px;
+  height: 64px;
   flex-shrink: 0;
 }
 
 .topnav .logo {
   text-decoration: none;
   white-space: nowrap;
-  flex-shrink: 0;
-  margin-right: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  justify-self: start;
 }
 
+.topnav .logo span {
+  color: var(--green);
+}
+
+/* Center pill container */
 .nav-tabs {
   display: flex;
   align-items: center;
   gap: 2px;
-  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 4px;
   overflow-x: auto;
   scrollbar-width: none;
+  justify-self: center;
 }
 .nav-tabs::-webkit-scrollbar { display: none; }
 
 .nav-tab {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
-  font-size: 0.82rem;
-  border-radius: 8px;
+  gap: 6px;
+  padding: 7px 13px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  border-radius: 10px;
   white-space: nowrap;
   width: auto;
   flex-shrink: 0;
   color: var(--muted);
-  transition: all 0.2s ease;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  letter-spacing: 0.1px;
 }
 
 .nav-tab:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--text);
+  border-color: rgba(255,255,255,0.08);
 }
 
 .nav-tab.active {
-  background: rgba(59, 220, 140, 0.12);
+  background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(91,232,192,0.1) 100%);
   color: var(--green);
-  border-color: rgba(59, 220, 140, 0.2);
+  border-color: rgba(59, 220, 140, 0.25);
+  box-shadow: 0 0 12px rgba(59,220,140,0.12), inset 0 1px 0 rgba(59,220,140,0.1);
+  font-weight: 600;
+}
+
+/* Emoji icon in tab */
+.nav-tab span.tab-icon {
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .topnav-actions {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
-  margin-left: auto;
+  justify-self: end;
 }
 
 .mobile-menu-btn {
@@ -162,6 +190,8 @@ body::before{
 .top-bar {
   display: none;
 }
+
+
 
 /* ─────────── MAIN CONTENT ─────────── */
 main {
