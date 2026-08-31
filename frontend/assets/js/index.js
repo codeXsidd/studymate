@@ -1,4 +1,4 @@
-const API_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") 
+const API_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "") 
   ? "http://localhost:8000" 
   : "https://studymate-f2bw.onrender.com";
 

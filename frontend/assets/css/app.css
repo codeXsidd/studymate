@@ -70,97 +70,114 @@ body::before{
   -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
 }
 
-/* ───────── APP LAYOUT (SIDEBAR) ───────── */
+/* ───────── APP LAYOUT (TOP NAV) ───────── */
 .app-container {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-/* ───────── SIDEBAR ───────── */
-.sidebar {
-  width: 260px;
-  background: rgba(14, 17, 23, 0.95);
+/* ───────── TOP NAV BAR ───────── */
+.topnav {
+  width: 100%;
+  background: rgba(9, 9, 11, 0.85);
   backdrop-filter: blur(20px);
-  border-right: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
   display: flex;
-  flex-direction: column;
-  padding: 32px 20px;
-  position: fixed;
-  height: 100vh;
+  align-items: center;
+  gap: 20px;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
   z-index: 100;
-  transition: all 0.3s ease;
+  height: 62px;
+  flex-shrink: 0;
 }
 
-.sidebar .logo {
-  margin-bottom: 40px;
-  padding-left: 12px;
+.topnav .logo {
   text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 .nav-tabs {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 2px;
   flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.nav-tabs::-webkit-scrollbar { display: none; }
 
 .nav-tab {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  font-size: 0.9rem;
-  border-radius: 12px;
-  text-align: left;
-  width: 100%;
+  gap: 7px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  width: auto;
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: all 0.2s ease;
 }
 
 .nav-tab:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
 }
 
 .nav-tab.active {
-  background: rgba(59, 220, 140, 0.1);
+  background: rgba(59, 220, 140, 0.12);
   color: var(--green);
   border-color: rgba(59, 220, 140, 0.2);
 }
 
-.sidebar-footer {
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
+.topnav-actions {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
-/* ───────── MAIN CONTENT ───────── */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  padding: 6px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mobile-menu-btn:hover { color: var(--text); border-color: var(--muted); }
+
+/* Top bar for mobile or shared controls — keep hidden since we're using topnav */
+.top-bar {
+  display: none;
+}
+
+/* ─────────── MAIN CONTENT ─────────── */
 main {
   flex: 1;
-  margin-left: 260px;
+  margin-left: 0;
   padding: 40px 60px 80px;
-  max-width: 1200px;
+  max-width: 1100px;
+  width: 100%;
+  margin-inline: auto;
   position: relative;
   z-index: 1;
-  transition: all 0.3s ease;
 }
 
 main.wide {
   max-width: 100% !important;
-}
-
-/* Top bar for mobile or shared controls */
-.top-bar {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: rgba(14, 17, 23, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 90;
+  padding-inline: 32px;
 }
 
 /* ───────── SECTION PAGES ───────── */
@@ -189,6 +206,8 @@ main.wide {
   animation:pulseGlow 2s infinite;
 }
 .hero h1{
+  position: static;
+  left: auto;
   font-family:'Outfit', sans-serif;
   font-size:clamp(2.5rem,5vw,3.8rem);
   font-weight:800;
@@ -523,6 +542,8 @@ main.wide {
 }
 .tutor-answer h1, .tutor-answer h2, .tutor-answer h3,
 .explanation-panel h1, .explanation-panel h2, .explanation-panel h3 {
+  position: static;
+  left: auto;
   font-family:'Syne',sans-serif;margin-bottom:10px;margin-top:16px;
 }
 .tutor-answer code, .explanation-panel code {
@@ -676,16 +697,57 @@ main.wide {
 
 /* ───────── RESPONSIVE ───────── */
 @media(max-width:800px){
-  nav{flex-wrap:wrap; justify-content:center; gap:12px; padding:14px 18px}
-  .nav-tabs{flex-wrap:wrap; justify-content:center; width:100%; order:3}
-  main{padding:24px 14px 60px}
   .tutor-input-row{flex-direction:column}
   .know-btns{flex-direction:column}
+  main{padding:24px 16px 60px}
 }
+
+/* ───────── MOBILE RESPONSIVENESS ───────── */
+@media (max-width: 768px) {
+  .topnav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 12px 16px;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+  }
+  .nav-tabs {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    order: 3;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    padding-bottom: 4px;
+    gap: 2px;
+  }
+  .nav-tabs.mobile-open {
+    display: flex;
+  }
+  .nav-tab {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+  .topnav-actions {
+    margin-left: auto;
+  }
+  .hero h1 { font-size: 2.2rem; }
+  .hero { padding: 24px 0 36px; }
+  .card { padding: 16px; }
+  .card-title { font-size: 1rem; }
+  .btn { width: 100%; justify-content: center; }
+  main { padding: 24px 16px 60px; }
+}
+
 @media(max-width:400px){
-  .nav-tab{padding:6px 10px; font-size:0.75rem}
+  .nav-tab{padding:8px 10px; font-size:0.75rem}
 }
-/* ───────── MIND MAP VISIBILITY ───────── */
+
 #mindmapContainer {
   overflow: auto;
   min-height: 40vh; /* Allow it to be smaller but not completely collapsed */
@@ -714,31 +776,7 @@ main.wide {
   height: auto !important;
 }
 
-/* ───────── MOBILE RESPONSIVENESS ───────── */
-@media (max-width: 992px) {
-  .sidebar {
-    transform: translateX(-100%);
-    box-shadow: 20px 0 50px rgba(0,0,0,0.5);
-  }
-  .sidebar.show {
-    transform: translateX(0);
-  }
-  main {
-    margin-left: 0;
-    padding: 24px 16px 60px;
-  }
-  .top-bar {
-    display: flex;
-  }
-}
 
-@media (max-width: 768px) {
-  .hero h1 { font-size: 2.2rem; }
-  .hero { padding: 24px 0 36px; }
-  .card { padding: 16px; }
-  .card-title { font-size: 1rem; }
-  .btn { width: 100%; justify-content: center; }
-}
 
 /* ───────── FLASHCARDS ───────── */
 .flashcard-container {

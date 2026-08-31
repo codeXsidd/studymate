@@ -1,9 +1,15 @@
 // ═════════════════════════════════════════
 //  STATE
 // ═════════════════════════════════════════
-const API = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") 
-  ? "http://localhost:8000" 
+const API = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "")
+  ? "http://localhost:8000"
   : "https://studymate-f2bw.onrender.com";
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
 
 let state = {
   topics: [],
@@ -697,10 +703,15 @@ async function submitFeynman() {
 function renderDebateTopics() {
   const container = document.getElementById("debateTopicsList");
   if (state.topics.length === 0) return;
-  
-  container.innerHTML = state.topics.map(t => 
-    `<button class="topic-chip" onclick="startDebate('${t}')"><span>💬</span> ${t}</button>`
-  ).join("");
+
+  container.innerHTML = "";
+  state.topics.forEach(t => {
+    const btn = document.createElement("button");
+    btn.className = "topic-chip";
+    btn.innerHTML = `<span>💬</span> ${escapeHtml(t)}`;
+    btn.onclick = () => startDebate(t);
+    container.appendChild(btn);
+  });
 }
 
 let activeDebateTopic = "";
@@ -784,10 +795,15 @@ async function submitDebateRebuttal() {
 function renderScenarioTopics() {
   const container = document.getElementById("scenarioTopicsList");
   if (state.topics.length === 0) return;
-  
-  container.innerHTML = state.topics.map(t => 
-    `<button class="topic-chip" onclick="startScenario('${t}')"><span>🌍</span> ${t}</button>`
-  ).join("");
+
+  container.innerHTML = "";
+  state.topics.forEach(t => {
+    const btn = document.createElement("button");
+    btn.className = "topic-chip";
+    btn.innerHTML = `<span>🌍</span> ${escapeHtml(t)}`;
+    btn.onclick = () => startScenario(t);
+    container.appendChild(btn);
+  });
 }
 
 let activeScenarioTopic = "";
@@ -872,10 +888,15 @@ function renderFlashcardTopics() {
   const container = document.getElementById("flashcardTopicsList");
   if (!container) return;
   if (state.topics.length === 0) return;
-  
-  container.innerHTML = state.topics.map(t => 
-    `<button class="topic-chip" onclick="startFlashcards('${t}')"><span>✨</span> ${t}</button>`
-  ).join("");
+
+  container.innerHTML = "";
+  state.topics.forEach(t => {
+    const btn = document.createElement("button");
+    btn.className = "topic-chip";
+    btn.innerHTML = `<span>✨</span> ${escapeHtml(t)}`;
+    btn.onclick = () => startFlashcards(t);
+    container.appendChild(btn);
+  });
 }
 
 let activeFlashcardTopic = "";
@@ -1014,12 +1035,11 @@ async function actionOnConcept(actionType) {
 
 // AUTH GUARD
 function checkAuth() {
-  const token = localStorage.getItem("sm_auth_token");
-  if (!token) {
-    window.location.href = "index.html"; // Redirect to login
+  if (!localStorage.getItem("sm_auth_token")) {
+    window.location.href = "index.html";
   } else {
     document.getElementById('logoutBtn').style.display = 'block';
-    
+
     // Set Dashboard User Name
     const userName = localStorage.getItem("sm_user_name");
     if (userName && document.getElementById("dashUserName")) {

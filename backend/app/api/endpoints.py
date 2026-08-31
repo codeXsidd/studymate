@@ -115,6 +115,8 @@ async def upload_pdf(file: UploadFile = File(...)):
 
         return {"detected_topics": stored_topics}
 
+    except HTTPException:
+        raise
     except Exception as e:
         print("UPLOAD ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Upload failed on server.")
@@ -140,6 +142,8 @@ async def quiz(data: QuizRequest):
                 print("DB Warning (quizzes):", db_err)
 
         return {"quiz": valid}
+    except HTTPException:
+        raise
     except Exception as e:
         print("QUIZ ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Quiz generation failed.")
@@ -243,6 +247,8 @@ async def flashcards(data: FlashcardRequest):
         if not valid:
             raise HTTPException(status_code=500, detail="Invalid flashcard format.")
         return {"flashcards": valid}
+    except HTTPException:
+        raise
     except Exception as e:
         print("FLASHCARDS ERROR:", str(e))
         raise HTTPException(status_code=500, detail="Flashcards generation failed.")

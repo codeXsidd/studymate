@@ -1,4 +1,4 @@
-const API_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") 
+const API_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "") 
   ? "http://localhost:8000" 
   : "https://studymate-f2bw.onrender.com";
 
@@ -36,7 +36,9 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
 
     successMsg.style.display = 'block';
     btn.innerText = "Redirecting...";
-    window.location.href = "index.html";
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 1500);
 
   } catch (err) {
     errorMsg.innerText = err.message;
